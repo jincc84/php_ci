@@ -10,12 +10,12 @@ $().ready(function() {
 
 	$(".btn_detail").click(function() {
 		var market_id = $(this).parent().parent().children(":first").text();
-		document.location.href = "/market/market/detail/" + market_id;
+		document.location.href = "/admin/market/detail/" + market_id;
 	});
 
 	$(".btn_photo_review").click(function() {
 		var market_id = $(this).parent().parent().children(":first").text();
-		document.location.href = "/market/photo_review/pre/" + market_id + "?cur_page=" + $("#cur_page").val();
+		document.location.href = "/admin/photo_review/pre/" + market_id + "?cur_page=" + $("#cur_page").val();
 	});
 });
 </script>
@@ -26,7 +26,7 @@ $().ready(function() {
 	<h1>market_list</h1>
 	<code>
 <?php echo validation_errors(); ?>
-<?php echo form_open("market/market/delete", array("id"=>"form_delete")); ?>
+<?php echo form_open("admin/market/delete", array("id"=>"form_delete")); ?>
 	<input type="hidden" name="market_id" />
 		<table>
 			<tr>

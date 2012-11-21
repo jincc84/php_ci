@@ -40,7 +40,7 @@ class Photo_review extends CO_Controller {
 		$this->photo_review_model->insert_photo_review($market_id, $content);
 
 // 		$this->pre($params->market_id);
-		redirect("/market/photo_review/pre/" . $params->market_id . "?cur_page=" . $params->cur_page, "refresh");
+		redirect("/admin/photo_review/pre/" . $params->market_id . "?cur_page=" . $params->cur_page, "refresh");
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Photo_review extends CO_Controller {
 		$this->load->model("photo_review_model");
 		$this->photo_review_model->update_photo_review($photo_review_id, $content);
 
-		redirect("/market/photo_review/pre/" . $params->market_id . "?cur_page=" . $params->cur_page, "refresh");
+		redirect("/admin/photo_review/pre/" . $params->market_id . "?cur_page=" . $params->cur_page, "refresh");
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Photo_review extends CO_Controller {
 		$this->load->model("photo_review_model");
 		$this->photo_review_model->delete_photo_review($photo_review_id);
 
-		redirect("/market/market/lists/" . $params->cur_page, "refresh");
+		redirect("/admin/market/lists/" . $params->cur_page, "refresh");
 	}
 }
 ?>

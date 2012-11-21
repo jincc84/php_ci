@@ -16,29 +16,67 @@ class Market_model extends CO_Model {
 	 * @param int $page
 	 * @param int $count
 	 */
-	function get_market_list($page = 1, $count = 10, $include_content = false) {
+	function get_market_list($page = 1, $count = 10, $market_image_area = false) {
 		$page = !$page ? 1 : $page;
 		$count = !$count ? 10 : $count;
 
-		$query = "SELECT a.*, pr.photo_review_id" . ($include_content ? ", pr.content" : "") . "
-				FROM market a left join photo_review pr
-				on a.market_id = pr.market_id
-				where is_delete = 'n'
-				LIMIT ?,?";
+		$where = array();
+		switch($market_image_area) {
+			case "main":
+				$query = "SELECT a.*,
+								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
+								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2,
+								pr.photo_review_id
+						FROM market a left join photo_review pr
+						on a.market_id = pr.market_id
+						where a.is_delete = 'n'
+						LIMIT ?,?
+				";
+				break;
+			default:
+				$query = "SELECT a.*, pr.photo_review_id
+						FROM market a left join photo_review pr
+						on a.market_id = pr.market_id
+						where a.is_delete = 'n'
+						LIMIT ?,?
+				";
+				break;
+		}
 
-		return $this->test->query($query, array((($page - 1) * $count), $count))->result();
+		$where = array(($page - 1) * $count, $count);
+
+		return $this->test->query($query, $where)->result();
 	}
 
 	/**
 	 * 매장 정보
 	 * @param unknown $market_id
 	 */
-	function get_market_info($market_id) {
-		$where = array(
-				"market_id"=>$market_id,
-				"is_delete" => "n"
-				);
-		return $this->test->get_where("market", $where)->row();
+	function get_market_info($market_id, $market_image_area = false) {
+		switch($market_image_area) {
+			case "main":
+				$query = "
+						select a.*,
+								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
+								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2
+				from market
+				where a.market_id = ?
+					and a.is_delete = 'n'
+				";
+				break;
+			default:
+				$query = "
+						select *
+						from market
+						where market_id = ?
+						and is_delete = 'n'
+				";
+				break;
+		}
+
+		$where = array($market_id);
+
+		return $this->test->query($query, $where)->row();
 	}
 
 	/**

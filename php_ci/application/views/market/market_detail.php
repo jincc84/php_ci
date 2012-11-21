@@ -21,7 +21,7 @@ $().ready(function() {
 		var address_sido_id = $(this).val();
 
 		$.ajax({
-			url:"/market/address/search_gugun/" + address_sido_id,
+			url:"/admin/address/search_gugun/" + address_sido_id,
 			dataType:"json",
 			success:function(data) {
 				data = eval(data);
@@ -41,7 +41,7 @@ $().ready(function() {
 		var address_gugun_id = $(this).val();
 
 		$.ajax({
-			url:"/market/address/search_dong/" + address_gugun_id,
+			url:"/admin/address/search_dong/" + address_gugun_id,
 			dataType:"json",
 			success:function(data) {
 				data = eval(data);
@@ -74,7 +74,7 @@ $().ready(function() {
 
  		$.ajax({
  	 		type:"post",
-			url: "/market/market/update_delivery_location/" + $("#market_id").val(),
+			url: "/admin/market/update_delivery_location/" + $("#market_id").val(),
 			dataType:"json",
 			data:{
 				address_gugun_id:$("select[name=gugun]").val(),
@@ -110,7 +110,7 @@ $().ready(function() {
 		var address_dong_id = _this.parent().attr("address_dong_id");
 		$.ajax({
 			type:"post",
-			url:"/market/market/delete_delivery_location/" + $("#market_id").val() + "/",
+			url:"/admin/market/delete_delivery_location/" + $("#market_id").val() + "/",
 			data:{
 				address_dong_id:address_dong_id
 			},
@@ -185,7 +185,7 @@ $().ready(function() {
 
 		$.ajax({
 //			type: "POST",
-			url: "/market/market/update_market_image_order/"  + market_id + "/" + market_image_area,
+			url: "/admin/market/update_market_image_order/"  + market_id + "/" + market_image_area,
 			dataType:"json",
 			success: function(data) {
 				data = eval(data);
@@ -212,7 +212,7 @@ $().ready(function() {
 		}
 
 		$.ajax({
-			url: "/market/market/market_image_pre_order/" + type + "/" + click.attr("market_image_id"),
+			url: "/admin/market/market_image_pre_order/" + type + "/" + click.attr("market_image_id"),
 			dataType: "json",
 			success: function(data) {
 				if(eval(data.result_code)) {
@@ -235,7 +235,7 @@ $().ready(function() {
 								target = $(this).prev();
 							}
 
-							target.addClass("market_image_main").attr("pre_order", click.attr("pre_order")).attr("market_image_id", click.attr("market_image_id"));
+							target.addClass("market_image_" + market_image_area).attr("pre_order", click.attr("pre_order")).attr("market_image_id", click.attr("market_image_id"));
 							target.children("span.down_image_order").click(function() {
 								click_image_order("down", $(this));
 							});
@@ -257,7 +257,7 @@ $().ready(function() {
 		var market_image_max_count_list = eval(<?php echo json_encode($market_image_max_count_list);?>);
 		var visible_count = market_image_max_count_list[market_image_area];
 
-		$(".market_image_" + market_image_area).each(function(index) {
+		$(".market_image_" + market_image_area + "_list li").each(function(index) {
 			if(index < visible_count) {
 				$(this).css("background-color", "#cccccc");
 			} else {
@@ -275,6 +275,8 @@ $().ready(function() {
 	});
 
 	set_market_image_list_background("main");
+	set_market_image_list_background("list");
+	set_market_image_list_background("detail");
 	/*
 		이미지 관련 끝
 	*/
@@ -311,28 +313,23 @@ $().ready(function() {
 			<li class="delivery_location_area">
 				배달 가능 지역 :
 <?php
-	foreach($delivery_location_list as $delivery_location) {
+			foreach($delivery_location_list as $delivery_location):
 ?>
 			<span class="delivery_location" address_dong_id="<?php echo $delivery_location->address_dong_id;?>">
 				<?php echo $delivery_location->sido . " " . $delivery_location->gugun . " " . $delivery_location->dong;?>
 				<span>X</span>
 			</span>
-<?php
-	}
-?>
+<?php	endforeach;?>
 			</li>
 			<li>
 				시도 :
 				<select name="sido">
 					<option value="0">선택</option>
-<?php
-	foreach($market_delivery_location_sido_list as $market_delivery_location_sido) {
+<?php	foreach($market_delivery_location_sido_list as $market_delivery_location_sido):
 ?>
 					<option value="<?php echo $market_delivery_location_sido->address_sido_id;?>"><?php echo $market_delivery_location_sido->sido;?></option>
-<?php
-	}
-?>
-				</select>
+<?php	endforeach;?>
+					</select>
 				구군 :
 				<select name="gugun">
 					<option value="0">선택</option>
@@ -357,18 +354,13 @@ $().ready(function() {
 				<input class="btn_set_order_image" type="button" value="순서 적용" market_image_area="main" />
 			</h4>
 			<ul class="market_image_list market_image_main_list" market_image_area="main">
-				<li>적용 순서 / 적용 전 순서 / 이미지</li>
-<?php
-	foreach($market_image_main_list as $market_image) {
-?>
+<?php	foreach($market_image_main_list as $market_image):?>
 				<li class="market_image_main" pre_order="<?php echo $market_image->image_pre_order;?>" market_image_id="<?php echo $market_image->market_image_id;?>">
 					<span class="order"><?php echo (!$market_image->image_order) ? "-" : $market_image->image_order;?></span> /
 					<span class="pre_order"><?php echo $market_image->image_pre_order;?></span> <span class="down_image_order btn_order_change">↓</span> <span class="up_image_order btn_order_change">↑</span> /
 					<img src="http://image.test.com<?php echo str_replace("/test_upload", "", $market_image->file_path) . $market_image->file_name;?>" width="25" height="19" />
 				</li>
-<?php
-	}
-?>
+<?php	endforeach;?>
 			</ul>
 		</ul>
 
@@ -376,18 +368,16 @@ $().ready(function() {
 			<h4>
 				리스트 이미지
 				<input class="btn_insert_image" type="button" value="등록" market_image_area="list" />
+				<input class="btn_set_order_image" type="button" value="순서 적용" market_image_area="list" />
 			</h4>
-			<ul class="market_image_list market_image_list_list">
-<?php
-	foreach($market_image_list_list as $market_image) {
-?>
-				<li>
-					file_path : <?php echo $market_image->file_path . $market_image->file_name;?>
+			<ul class="market_image_list market_image_list_list" market_image_area="list">
+<?php	foreach($market_image_list_list as $market_image):?>
+				<li class="market_image_list" pre_order="<?php echo $market_image->image_pre_order;?>" market_image_id="<?php echo $market_image->market_image_id;?>">
+					<span class="order"><?php echo (!$market_image->image_order) ? "-" : $market_image->image_order;?></span> /
+					<span class="pre_order"><?php echo $market_image->image_pre_order;?></span> <span class="down_image_order btn_order_change">↓</span> <span class="up_image_order btn_order_change">↑</span> /
 					<img src="http://image.test.com<?php echo str_replace("/test_upload", "", $market_image->file_path) . $market_image->file_name;?>" width="25" height="19" />
 				</li>
-<?php
-	}
-?>
+<?php	endforeach;?>
 			</ul>
 		</ul>
 
@@ -396,23 +386,20 @@ $().ready(function() {
 				상세 이미지
 				<input class="btn_insert_image" type="button" value="등록" market_image_area="detail" />
 			</h4>
-			<ul class="market_image_list market_image_detail_list">
-<?php
-	foreach($market_image_detail_list as $market_image) {
-?>
-				<li>
-					file_path : <?php echo $market_image->file_path . $market_image->file_name;?>
-					<img src="<?php echo str_replace("C:/github/workspace/practice_ci/php_ci", "", $market_image->file_path) . $market_image->file_name;?>" width="25" height="19" />
+			<ul class="market_image_list market_image_detail_list" market_image_area="detail">
+<?php	foreach($market_image_detail_list as $market_image):?>
+				<li class="market_image_detail" pre_order="<?php echo $market_image->image_pre_order;?>" market_image_id="<?php echo $market_image->market_image_id;?>">
+					<span class="order"><?php echo (!$market_image->image_order) ? "-" : $market_image->image_order;?></span> /
+					<span class="pre_order"><?php echo $market_image->image_pre_order;?></span> <span class="down_image_order btn_order_change">↓</span> <span class="up_image_order btn_order_change">↑</span> /
+					<img src="http://image.test.com<?php echo str_replace("/test_upload", "", $market_image->file_path) . $market_image->file_name;?>" width="25" height="19" />
 				</li>
-<?php
-	}
-?>
+<?php	endforeach;?>
 			</ul>
 		</ul>
 	</code>
 
 	<div id="insert_image_area">
-		<?php echo form_open_multipart('market/market/upload_image');?>
+		<?php echo form_open_multipart('admin/market/upload_image');?>
 			<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 			<input type="hidden" name="market_image_area" />
 			<input type="file" name="userfile" size="20" /><br />
@@ -421,6 +408,6 @@ $().ready(function() {
 	</div>
 
 	<h4>
-		메뉴 관련 정보 <button onclick='document.location.href="/market/menu/lists/<?php echo $market_info->market_id;?>";'>Go</button>
+		메뉴 관련 정보 <button onclick='document.location.href="/admin/menu/lists/<?php echo $market_info->market_id;?>";'>Go</button>
 	</h4>
 </div>

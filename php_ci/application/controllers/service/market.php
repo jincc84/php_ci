@@ -15,7 +15,7 @@ class Market extends CO_Controller {
 
 		$this->load->model('market_model');
 		$market_count = $this->market_model->get_market_list_count();
-		$market_list = $this->market_model->get_market_list($cur_page, $count_per_page, true);
+		$market_list = $this->market_model->get_market_list($cur_page, $count_per_page, "main");
 		$pagination = $this->set_pagination("/service/market/lists", $market_count, $cur_page, $count_per_page);
 
 		$this->set_attribute("cur_page", $cur_page);

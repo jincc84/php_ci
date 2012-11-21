@@ -11,7 +11,7 @@ $().ready(function() {
 	$(".btn_delete_menu_option_group").click(function() {
 		var area = $(this).parent().parent();
 		$.ajax({
-			url:"/market/menu_option/delete_group/" + area.attr("menu_option_group_id"),
+			url:"/admin/menu_option/delete_group/" + area.attr("menu_option_group_id"),
 			dataType:"json",
 			success:function(result) {
 				if(eval(result)) {
@@ -84,7 +84,7 @@ $().ready(function() {
 		<h4>옵션 그룹 추가</h4>
 		<code>
 <?php echo validation_errors(); ?>
-<?php echo form_open("market/menu_option/insert_group", array("id"=>"menu_option_group_form")); ?>
+<?php echo form_open("admin/menu_option/insert_group", array("id"=>"menu_option_group_form")); ?>
 			<ul>
 				<li>옵션 그룹명 : <input type="text" name="menu_option_group_name" /></li>
 				<li>필수 여부 : <input type="checkbox" name="is_essential" /></li>
@@ -100,7 +100,7 @@ $().ready(function() {
 		<h4><span></span> 옵션 추가</h4>
 		<code>
 <?php echo validation_errors(); ?>
-<?php echo form_open("market/menu_option/insert", array("id"=>"insert_menu_option_form")); ?>
+<?php echo form_open("admin/menu_option/insert", array("id"=>"insert_menu_option_form")); ?>
 			<ul>
 				<li>옵션명 : <input type="text" name="menu_option_name" /></li>
 				<li>추가 가격 : <input type="text" name="add_price" /></li>
@@ -114,7 +114,7 @@ $().ready(function() {
 		</code>
 	</div>
 </div>
-<?php echo form_open("market/menu_option/delete", array("id"=>"delete_menu_option_form")); ?>
+<?php echo form_open("admin/menu_option/delete", array("id"=>"delete_menu_option_form")); ?>
 	<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 	<input type="hidden" name="menu_id" value="<?php echo $menu_info->menu_id;?>" />
 	<input type="hidden" name="menu_option_id" />

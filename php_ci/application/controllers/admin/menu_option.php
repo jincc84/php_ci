@@ -27,7 +27,7 @@ class Menu_option extends CO_Controller {
 			var_dump($menu_option_group_id);
 		}
 
-		redirect("/market/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
+		redirect("/admin/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
 	}
 
 	public function delete_group($menu_option_group_id) {
@@ -53,7 +53,7 @@ class Menu_option extends CO_Controller {
 			var_dump($menu_option_id);
 		}
 
-		redirect("/market/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
+		redirect("/admin/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
 	}
 
 	public function delete() {
@@ -66,6 +66,6 @@ class Menu_option extends CO_Controller {
 
 		$menu_opton_id = $this->menu_option_model->delete_menu_option($params->menu_option_id);
 
-		redirect("/market/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
+		redirect("/admin/menu/detail/" . $params->market_id. "/" . $params->menu_id, "refresh");
 	}
 }

@@ -72,7 +72,7 @@ $().ready(function() {
 	});
 
 	$(".btn_menu_detail").click(function() {
-		document.location.href = "/market/menu/detail/" + $(this).attr("market_id") + "/" + $(this).attr("menu_id");
+		document.location.href = "/admin/menu/detail/" + $(this).attr("market_id") + "/" + $(this).attr("menu_id");
 	});
 
 	function set_menu_category_relation(_this) {
@@ -89,6 +89,26 @@ $().ready(function() {
 	});
 
 	$("input[name=btn_apply_menu_category_relation]").click(function() {
+		var has_image = eval($(this).parent().attr("has_image"));
+		var result = true;
+		var invalid_category_name = "";
+		$(this).parent().children("input[name=set_menu_category_relation]:checked").each(function() {
+			if(has_image && $(this).attr("menu_category_type") != "photo") {
+				invalid_category_name = $(this).next().text();
+				result = false;
+			} else if(!has_image && $(this).attr("menu_category_type") != "normal") {
+				invalid_category_name = $(this).next().text();
+				result = false;
+			}
+
+			return result;
+		});
+
+		if(!result) {
+			alert("'" + invalid_category_name + "' 카테고리에 적용할 수 없습니다.");
+			return;
+		}
+
 		var menu_id = $(this).parent().attr("menu_id");
 		var menu_category_id = $(this).parent().attr("menu_category_id");
 		if(menu_category_id.length > 0) {
@@ -97,7 +117,7 @@ $().ready(function() {
 
 		$.ajax({
 			type:"post",
-			url: "/market/market/update_menu_category_relation",
+			url: "/admin/market/update_menu_category_relation",
 			data: {
 				menu_id: menu_id,
 				menu_category_id: menu_category_id
@@ -124,7 +144,7 @@ $().ready(function() {
 			}
 
 			$.ajaxFileUpload({
-	                url:"/market/menu/upload_image",
+	                url:"/admin/menu/upload_image",
 	                secureuri:false,
 	                fileElementId: is_update ? "userfile_update" : "userfile_insert",
 	                dataType: 'json',
@@ -200,14 +220,10 @@ $().ready(function() {
 			foreach($menu_list as $menu) {
 ?>
 				<ul>
-					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>">
-<?php
-				if(isset($menu->menu_image_path)) {
-?>
+					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>" has_image="<?php echo isset($menu->menu_image_path);?>">
+<?php		if(isset($menu->menu_image_path)):?>
 						<img src="http://image.test.com<?php echo str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />
-<?php
-				}
-?>
+<?php		endif;?>
 						<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price) . " / " . $menu->fee . "%";?>
 						<input type="button" class="btn_delete_menu" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 삭제" />
 						<input type="button" class="btn_show_update_menu_area" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 수정" />
@@ -217,7 +233,7 @@ $().ready(function() {
 				foreach($menu_category_list as $menu_category) {
 						$checked = isset($menu_category->menu_list[$menu->menu_id]) ? "checked=checked" : "";
 ?>
-						<input type="checkbox" name="set_menu_category_relation" value="<?php echo $menu_category->menu_category_id;?>" <?php echo $checked;?> menu_category_type="<?php echo $menu_category->menu_category_type;?>" /> <?php echo $menu_category->menu_category_name;?>
+						<input type="checkbox" name="set_menu_category_relation" value="<?php echo $menu_category->menu_category_id;?>" <?php echo $checked;?> menu_category_type="<?php echo $menu_category->menu_category_type;?>" /> <span><?php echo $menu_category->menu_category_name;?></span>
 <?php
 				}
 ?>
@@ -264,7 +280,7 @@ $().ready(function() {
 		<h4>메뉴 카테고리 추가</h4>
 		<code>
 <?php echo validation_errors(); ?>
-<?php echo form_open("market/menu/insert_category", array("id"=>"menu_category_form")); ?>
+<?php echo form_open("admin/menu/insert_category", array("id"=>"menu_category_form")); ?>
 			<ul>
 				<li>메뉴 카테고리명 : <input type="text" name="menu_category_name" /></li>
 				<li>카테고리 타입 : <input type="radio" name="menu_category_type" value="normal" checked="checked" /> 일반	<input type="radio" name="menu_category_type" value="photo" /> 사진</li>
@@ -281,7 +297,7 @@ $().ready(function() {
 		<code>
 <?php echo validation_errors(); ?>
 			<ul>
-				<?php echo form_open("market/menu/insert", array("id"=>"insert_menu_form")); ?>
+				<?php echo form_open("admin/menu/insert", array("id"=>"insert_menu_form")); ?>
 					<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 					<input type="hidden" name="menu_image_id" />
 					<li>메뉴명 : <input type="text" name="menu_name" /></li>
@@ -308,7 +324,7 @@ $().ready(function() {
 		<code>
 <?php echo validation_errors(); ?>
 			<ul>
-				<?php echo form_open("market/menu/update", array("id"=>"update_menu_form")); ?>
+				<?php echo form_open("admin/menu/update", array("id"=>"update_menu_form")); ?>
 					<input type="hidden" name="menu_id" />
 					<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 					<input type="hidden" name="menu_image_id" />
@@ -337,12 +353,12 @@ $().ready(function() {
 		</code>
 	</div>
 </div>
-<?php echo form_open("market/menu/delete", array("id"=>"delete_menu_form")); ?>
+<?php echo form_open("admin/menu/delete", array("id"=>"delete_menu_form")); ?>
 	<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 	<input type="hidden" name="menu_id" />
 </form>
 
-<?php echo form_open("market/menu/delete_category", array("id"=>"delete_menu_category_form")); ?>
+<?php echo form_open("admin/menu/delete_category", array("id"=>"delete_menu_category_form")); ?>
 	<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 	<input type="hidden" name="menu_category_id" />
 </form>

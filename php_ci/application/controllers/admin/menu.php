@@ -81,7 +81,7 @@ class Menu extends CO_Controller {
 			$menu_category_id = $this->menu_model->insert_menu_category($params);
 		}
 
-		redirect("/market/menu/lists/" . $params->market_id, "refresh");
+		redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Menu extends CO_Controller {
 		$result = $this->menu_model->delete_menu_category($params->menu_category_id);
 
 		$this->lists($params->market_id);
-// 		redirect("/market/menu/lists/" . $params->market_id, "refresh");
+// 		redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 	}
 
 	/**
@@ -128,7 +128,7 @@ class Menu extends CO_Controller {
 			}
 		}
 
-		redirect("/market/menu/lists/" . $params->market_id, "refresh");
+		redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 	}
 
 	/**
@@ -149,7 +149,7 @@ class Menu extends CO_Controller {
 
 		if($form_result) {
 			$menu_option_id = $this->menu_model->update_menu($params);
-			redirect("/market/menu/lists/" . $params->market_id, "refresh");
+			redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 		} else {
 			$this->lists($params->market_id);
 		}
@@ -171,7 +171,7 @@ class Menu extends CO_Controller {
 						$this->menu_option_model->delete_menu_option_group_by_menu($params->menu_id) &&
 						$this->menu_option_model->delete_menu_option_by_menu($params->menu_id);
 
-		redirect("/market/menu/lists/" . $params->market_id, "refresh");
+		redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 	}
 
 	/**

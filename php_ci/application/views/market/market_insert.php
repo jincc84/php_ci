@@ -12,7 +12,7 @@ $().ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "/market/market/zipcode/"  + query,
+			url: "/admin/market/zipcode/"  + query,
 			dataType:"json",
 			success: function(data) {
 				if(data == null) {
@@ -61,7 +61,7 @@ code {position:relative;}
 <div id="body">
 	<h1>market_insert</h1>
 	<?php echo validation_errors(); ?>
-	<?php echo form_open("market/market/insert", array("id"=>"form_insert")); ?>
+	<?php echo form_open("admin/market/insert", array("id"=>"form_insert")); ?>
 	<code>
 		<ul>
 			<li>매장 이름 : <input name="market_name" value="<?php echo $params->market_name;?>" /></li>

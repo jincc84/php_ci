@@ -18,7 +18,7 @@ $().ready(function() {
 		</ul>
 	</h3>
 	<code>
-		<form action="/market/photo_review/<?php echo (isset($photo_review_info->photo_review_id) ? 'update' : 'insert');?>" method="post">
+		<form action="/admin/photo_review/<?php echo (isset($photo_review_info->photo_review_id) ? 'update' : 'insert');?>" method="post">
 			<input type="hidden" name="cur_page" value="<?php echo $cur_page;?>" />
 			<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
 			<input type="hidden" name="photo_review_id" value="<?php echo (isset($photo_review_info->photo_review_id) ? $photo_review_info->photo_review_id : '');?>" />
@@ -40,7 +40,7 @@ $().ready(function() {
 ?>
 			</p>
 		</form>
-		<form method="post" action="/market/photo_review/delete" name="delete_content_form">
+		<form method="post" action="/admin/photo_review/delete" name="delete_content_form">
 			<input type="hidden" name="photo_review_id" value="<?php echo (isset($photo_review_info->photo_review_id) ? $photo_review_info->photo_review_id : '');?>" />
 			<input type="hidden" name="cur_page" value="<?php echo $cur_page;?>" />
 		</form>

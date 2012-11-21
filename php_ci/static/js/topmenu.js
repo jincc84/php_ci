@@ -6,11 +6,11 @@ var category = {
 					{
 						id:10100,
 						name:"market_lists",
-						url:"/market/market/lists"
+						url:"/admin/market/lists"
 					}, {
 						id:10200,
 						name:"market_insert",
-						url:"/market/market/insert"
+						url:"/admin/market/insert"
 					}
 			)
 		}, {
