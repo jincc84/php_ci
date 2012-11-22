@@ -9,7 +9,8 @@ class Menu_option_model extends CO_Model {
 				"menu_id" => $params->menu_id,
 				"menu_option_group_name" => $params->menu_option_group_name,
 				"is_essential" => ($params->is_essential) ? 'y' : 'n',
-				"max_select" => (!$params->max_select ? 0 : $params->max_select)
+				"max_select" => (!$params->max_select ? 0 : $params->max_select),
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("menu_option_group", $data);
@@ -44,7 +45,8 @@ class Menu_option_model extends CO_Model {
 		$data = array(
 				"menu_option_group_id" => $params->menu_option_group_id,
 				"menu_option_name" => $params->menu_option_name,
-				"add_price" => $params->add_price
+				"add_price" => $params->add_price,
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("menu_option", $data);
@@ -102,6 +104,10 @@ class Menu_option_model extends CO_Model {
 		$where = array($menu_option_group_id);
 
 		return $this->test->query($query, $where)->result();
+	}
+
+	function get_menu_option_info($menu_option_id) {
+		return $this->test->get_where("menu_option", array("menu_option_id"=>$menu_option_id))->row();
 	}
 }
 

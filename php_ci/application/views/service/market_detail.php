@@ -47,17 +47,12 @@ $().ready(function() {
 	}).mouseout(function() {
 		$(this).css("background-color", "transparent");
 	});
-/*
-	$(".menu").click(function() {
-		$.get("/service/menu/get_option", {
-			menu_id: $(this).attr("menu_id")
-		}, function(result) {
-			data = JSON.parse(result);
 
-			alert(data.length);
-		});
+	$("#btn_order").click(function() {
+		$("#form_order input[name=order]").val(JSON.stringify(Order.get_order()));
+		$("#form_order").submit();
 	});
-*/
+
 	Order.init();
 });
 </script>
@@ -153,6 +148,13 @@ span.add, span.sub {font-size:12pt;}
 		</ul>
 		<p>
 			total price: <span id="total_price">0</span>원
+		</p>
+		<p>
+<?php echo form_open("service/order", array("id"=>"form_order", "method" => "get")); ?>
+				<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
+				<input type="hidden" name="order" />
+				<input type="button" id="btn_order" value="주문하기" />
+			</form>
 		</p>
 	</code>
 	<div id="option_area">

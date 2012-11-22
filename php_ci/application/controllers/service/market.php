@@ -24,6 +24,8 @@ class Market extends CO_Controller {
 	}
 
 	public function detail($market_id) {
+		$this->load_helper(array("form"));
+
 		$this->load->model('market_model');
 		$this->load->model('menu_model');
 		$this->load->model('address_model');

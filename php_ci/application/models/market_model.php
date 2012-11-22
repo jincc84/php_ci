@@ -91,6 +91,7 @@ class Market_model extends CO_Model {
 				"market_address2" => $params->market_address2,
 				"postcd" => $params->postcd,
 				"default_fee" => $params->default_fee,
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("market", $data);
@@ -141,7 +142,8 @@ class Market_model extends CO_Model {
 				"file_name" => $upload_data["file_name"],
 				"file_size" => $upload_data["file_size"],
 				"image_width" => $upload_data["image_width"],
-				"image_height" => $upload_data["image_height"]
+				"image_height" => $upload_data["image_height"],
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("market_image", $data);

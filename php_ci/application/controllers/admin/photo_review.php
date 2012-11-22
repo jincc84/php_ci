@@ -23,7 +23,7 @@ class Photo_review extends CO_Controller {
 		$this->set_attribute('market_info', $market_info);
 		$this->set_attribute('photo_review_info', $photo_review_info);
 		$this->set_attribute("cur_page", $params->cur_page);
-		$this->set_view('market/photo_review');
+		$this->set_view('service/photo_review');
 	}
 
 	/**

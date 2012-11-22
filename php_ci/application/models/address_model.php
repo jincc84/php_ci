@@ -30,7 +30,7 @@ class Address_model extends CO_Model {
 						select address_dong_id, dong
 						from address_dong
 						where address_gugun_id = '{$address_id}'
-						and is_used = 'y'
+						and is_active = 'Y'
 				";
 
 				$query = "
@@ -38,7 +38,7 @@ class Address_model extends CO_Model {
 						from address_dong d left join market_delivery_location mdl
 							on d.address_dong_id = mdl.address_dong_id
 						where address_gugun_id = '{$address_id}'
-						and is_used = 'y'
+						and is_active = 'Y'
 						";
 				break;
 		}

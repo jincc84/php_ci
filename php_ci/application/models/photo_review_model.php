@@ -12,7 +12,8 @@ class Photo_review_model extends CO_Model {
 	function insert_photo_review($market_id, $content) {
 		$data = array(
 				"market_id" => $market_id,
-				"content" => $content
+				"content" => $content,
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		return $this->test->insert("photo_review", $data);

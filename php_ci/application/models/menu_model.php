@@ -12,7 +12,8 @@ class Menu_model extends CO_Model {
 		$data = array(
 				"market_id" => $params->market_id,
 				"menu_category_type" => $params->menu_category_type,
-				"menu_category_name" => $params->menu_category_name
+				"menu_category_name" => $params->menu_category_name,
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("menu_category", $data);
@@ -50,6 +51,7 @@ class Menu_model extends CO_Model {
 				"menu_name" => $params->menu_name,
 				"price" => $params->price,
 				"fee" => $params->fee,
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("menu", $data);
@@ -138,7 +140,8 @@ class Menu_model extends CO_Model {
 				"file_name" => $upload_data["file_name"],
 				"file_size" => $upload_data["file_size"],
 				"image_width" => $upload_data["image_width"],
-				"image_height" => $upload_data["image_height"]
+				"image_height" => $upload_data["image_height"],
+				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
 		$this->test->insert("menu_image", $data);

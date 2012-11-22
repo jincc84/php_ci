@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $().ready(function() {
-		$("input[name=market_search_address]").keypress(function(event) {
+	$("input[name=market_search_address]").keypress(function(event) {
 		if(event.which == 13) {
 			$(".btn_search_address").trigger("click");
 			return false;

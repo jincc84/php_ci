@@ -31,7 +31,7 @@ class Menu extends CO_Controller {
 		$this->set_attribute("menu_category_list", $menu_category_list);
 		$this->set_attribute("menu_list", $this->menu_model->get_menu_list($market_id, "menu_id_unique"));
 
-		$this->set_view('market/menu_list');
+		$this->set_view('admin/menu_list');
 	}
 
 	/**
@@ -60,7 +60,7 @@ class Menu extends CO_Controller {
 		$this->set_attribute("menu_info", $menu_info);
 		$this->set_attribute("menu_option_group_list", $menu_option_group_list);
 
-		$this->set_view('market/menu_detail');
+		$this->set_view('admin/menu_detail');
 	}
 
 	/**

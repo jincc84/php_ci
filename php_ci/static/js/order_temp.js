@@ -79,6 +79,10 @@ var Order = function() {
 		});
 	}
 
+	function _init_standby(_orders) {
+		alert(_orders);
+	}
+
 	/**
 	 * 메뉴 정보 return
 	 * @param menu_id menu_id
@@ -189,8 +193,10 @@ var Order = function() {
 		var order_info = {
 				order_id:orders.temp_order_id,
 				menu_id:menu.menu_id,
+				menu_name:menu.menu_name,
 				price : eval(menu.price),
 				count:1,
+				fee:menu.fee,
 				menu_option_list:[]
 		};
 
@@ -232,9 +238,8 @@ var Order = function() {
 	 * 총 주문 금액 계산
 	 */
 	function _calculate_total_price() {
-		var delivery_tip = $("#delivery_tip_area span").text().replace(/,/g, '');
-
-		var total_price = parseInt(delivery_tip);
+		var delivery_tip = parseInt($("#delivery_tip_area span").text().replace(/,/g, ''));
+		var total_price = delivery_tip;
 		$("#orderlist>li").each(function() {
 			total_price += $(this).attr("count") * $(this).attr("price").replace(/,/g, '');
 		});
@@ -274,6 +279,9 @@ var Order = function() {
 	return {
 		init: function(menus) {
 			_set_menu(menus);
+		},
+		init_standby: function(orders) {
+			_init_standby(orders);
 		},
 		set_option: function() {
 			var is_success = true;
@@ -352,6 +360,9 @@ var Order = function() {
 			}
 
 			_calculate_total_price();
+		},
+		get_order: function() {
+			return orders;
 		},
 		close: function() {
 			$("#option_area").hide();
