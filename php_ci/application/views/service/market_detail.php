@@ -67,11 +67,12 @@ $().ready(function() {
 
 #order_area {position:absolute; right:500px; top:150px; min_width:300px;}
 #orderlist>li>span.btn {cursor:pointer;}
-#option_area {display:none; position:absolute; top:150px; left:100px; width:300px; min_height:200px; border:1px solid gray; background-color:white; margin:0;}
+#option_area {display:none; position:absolute; top:150px; left:550px; width:300px; min_height:200px; border:1px solid gray; background-color:white; margin:0;}
 #option_area h2 {font-size:12pt; border-bottom:1px dotted gray; margin:0; padding:5px; cursor:pointer;}
 #option_area h3 {font-size:9pt; padding-left:5px;}
 span.add, span.sub {font-size:12pt;}
 
+#delivery_tip_area {display:none;}
 </style>
 <div id="body">
 	<input type="hidden" id="market_id" value="<?php echo $market_info->market_id;?>" />
@@ -147,6 +148,9 @@ span.add, span.sub {font-size:12pt;}
 
 	<code id="order_area">
 		<ul id="orderlist"></ul>
+		<ul id="delivery_tip_area">
+			<li>배달팁 : <span><?php echo number_format($market_info->delivery_tip);?></span>원</li>
+		</ul>
 		<p>
 			total price: <span id="total_price">0</span>원
 		</p>

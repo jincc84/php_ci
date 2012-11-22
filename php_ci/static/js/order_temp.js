@@ -130,7 +130,7 @@ var Order = function() {
 				var detail_option = option.menu_option_list[j];
 				var li = "<li>" +
 					"<input type='" + option_info.input_type + "' />" +
-					detail_option.menu_option_name + (detail_option.add_price != 0 ? "(" + detail_option.add_price + ")" : "") +
+					detail_option.menu_option_name + (detail_option.add_price != 0 ? "(" + commify(detail_option.add_price) + ")" : "") +
 					"</li>";
 
 				$("#optionlist_area ul:last").append(li);
@@ -159,13 +159,13 @@ var Order = function() {
 								option_price += eval($(this).attr("add_price"));
 							});
 
-							$("#order_price").text(price + option_price);
+							$("#order_price").text(commify(price + option_price));
 						}
 					});
 			}
 		}
 
-		$("#order_price").text(menu.attr("price"));
+		$("#order_price").text(commify(menu.attr("price")));
 		$("#menu_name").text(menu.attr("menu_name"));
 		$("#option_area").show();
 	}
@@ -211,12 +211,12 @@ var Order = function() {
 
 		$("#orderlist").children("li:last").children("span.menu_name").text(menu.menu_name); // 메뉴명
 		$("#orderlist").children("li:last").children("span.options").text(option_names); // 옵션 나열
-		$("#orderlist").children("li:last").children("span.price").text(order_info.price); // 가격
+		$("#orderlist").children("li:last").children("span.price").text(commify(order_info.price)); // 가격
 		$("#orderlist").children("li:last")
 			.attr("order_id", orders.temp_order_id++)
 			.attr("menu_id", menu.menu_id)
 			.attr("name", menu.menu_name)
-			.attr("price", order_info.price)
+			.attr("price", commify(order_info.price))
 			.attr("count", 1)
 			.children("span.btn").click(function() {
 				var classname = $(this).attr("class");
@@ -232,12 +232,21 @@ var Order = function() {
 	 * 총 주문 금액 계산
 	 */
 	function _calculate_total_price() {
-		var total_price = 0;
+		var delivery_tip = $("#delivery_tip_area span").text().replace(/,/g, '');
+
+		var total_price = parseInt(delivery_tip);
 		$("#orderlist>li").each(function() {
-			total_price += $(this).attr("count") * $(this).attr("price");
+			total_price += $(this).attr("count") * $(this).attr("price").replace(/,/g, '');
 		});
 
-		$("#total_price").text(total_price);
+		if(total_price == delivery_tip) {
+			total_price = 0;
+			$("#delivery_tip_area").hide();
+		} else {
+			$("#delivery_tip_area").show();
+		}
+
+		$("#total_price").text(commify(total_price));
 	}
 
 	/**
@@ -246,6 +255,20 @@ var Order = function() {
 	function _empty_option_data() {
 		$("#optionlist_area").empty();
 		$("#menu_name").text("");
+	}
+
+	/**
+	 * 천 단위 구분자 찍기
+	 */
+	function commify(n) {
+		var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
+		n += '';                          // 숫자를 문자열로 변환
+
+		while (reg.test(n)) {
+			  n = n.replace(reg, '$1' + ',' + '$2');
+		}
+
+		return n;
 	}
 
 	return {

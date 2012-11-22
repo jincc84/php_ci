@@ -75,46 +75,36 @@ $().ready(function() {
 		document.location.href = "/admin/menu/detail/" + $(this).attr("market_id") + "/" + $(this).attr("menu_id");
 	});
 
-	function set_menu_category_relation(_this) {
-		_this.parent().attr("menu_category_id", "");
-		$("input[name=set_menu_category_relation]:checked").each(function() {
-//			alert($(this).attr("menu_category_type"));
-			$(this).parent().attr("menu_category_id", $(this).parent().attr("menu_category_id") + $(this).val() + ",");
-		});
-	}
-	$("input[name=set_menu_category_relation]").each(function() {
-		set_menu_category_relation($(this));
-	}).click(function() {
-		set_menu_category_relation($(this));
-	});
-
 	$("input[name=btn_apply_menu_category_relation]").click(function() {
 		var has_image = eval($(this).parent().attr("has_image"));
-		var result = true;
 		var invalid_category_name = "";
+		var menu_category_ids = new Array();
 		$(this).parent().children("input[name=set_menu_category_relation]:checked").each(function() {
 			if(has_image && $(this).attr("menu_category_type") != "photo") {
 				invalid_category_name = $(this).next().text();
-				result = false;
+				return false;
 			} else if(!has_image && $(this).attr("menu_category_type") != "normal") {
 				invalid_category_name = $(this).next().text();
-				result = false;
+				return false;
+			} else {
+				menu_category_ids.push($(this).val());
 			}
-
-			return result;
 		});
 
-		if(!result) {
+		if(invalid_category_name != "") {
 			alert("'" + invalid_category_name + "' 카테고리에 적용할 수 없습니다.");
 			return;
 		}
 
-		var menu_id = $(this).parent().attr("menu_id");
-		var menu_category_id = $(this).parent().attr("menu_category_id");
-		if(menu_category_id.length > 0) {
-			menu_category_id = menu_category_id.substr(0, menu_category_id.length - 1);
+		var menu_category_id = "";
+		for(var i=0; i<menu_category_ids.length; i++) {
+			menu_category_id += menu_category_ids[i];
+			if(i + 1 < menu_category_ids.length) {
+				menu_category_id += ",";
+			}
 		}
 
+		var menu_id = $(this).parent().attr("menu_id");
 		$.ajax({
 			type:"post",
 			url: "/admin/market/update_menu_category_relation",

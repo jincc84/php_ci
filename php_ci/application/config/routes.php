@@ -39,7 +39,8 @@
 */
 
 // $route['default_controller'] = "welcome";
-$route['default_controller'] = "test";
+// $route['default_controller'] = "test";
+$route['default_controller'] = "service/market/lists";
 $route['404_override'] = '';
 
 
