@@ -49,8 +49,13 @@ $().ready(function() {
 	});
 
 	$("#btn_order").click(function() {
-		$("#form_order input[name=order]").val(JSON.stringify(Order.get_order()));
-		$("#form_order").submit();
+		var orders = Order.get_order();
+		if(orders.order_list.length == 0) {
+			alert("메뉴 선택 후 주문하기 클릭해 주세요.");
+		} else {
+			$("#form_order input[name=order]").val(JSON.stringify(orders));
+			$("#form_order").submit();
+		}
 	});
 
 	Order.init();

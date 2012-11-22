@@ -8,7 +8,6 @@ class Menu extends CO_Controller {
 	}
 
 	public function lists($market_id) {
-		var_dump($market_id);
 	}
 
 	public function get_option() {

@@ -23,7 +23,6 @@ class Order_model extends CO_Model {
 				if($result) {
 					$order_menu_id = $this->test->insert_id();
 					foreach($menu["menu_option_list"] as $option) {
-						var_dump($option["menu_option_id"]);
 						$option_info = $this->menu_option_model->get_menu_option_info($option["menu_option_id"]);
 						$result = $this->insert_order_menu_option($order_menu_id, $option_info);
 						if(!$result) {

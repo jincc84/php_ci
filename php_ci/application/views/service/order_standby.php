@@ -12,7 +12,7 @@ $().ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "/admin/market/zipcode/"  + query,
+			url: "/common/utility/zipcode/"  + query,
 			dataType:"json",
 			success: function(data) {
 				if(data == null) {
