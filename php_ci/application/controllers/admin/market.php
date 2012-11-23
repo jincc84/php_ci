@@ -25,7 +25,7 @@ class Market extends CO_Controller {
 
 		$this->set_attribute("cur_page", $cur_page);
 		$this->set_attribute('market_list', $market_list);
-		$this->set_view('service/market_list');
+		$this->set_view('admin/market_list');
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Market extends CO_Controller {
 
 		$this->set_attribute("market_image_max_count_list", $market_image_max_count_list);
 
-		$this->set_view('service/market_detail');
+		$this->set_view('admin/market_detail');
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Market extends CO_Controller {
 	public function update() {
 		$this->layout->set_layout('layout/layout_main');
 		$data = array();
-		$this->layout->view('service/market', $data);
+		$this->layout->view('admin/market', $data);
 	}
 
 	/**

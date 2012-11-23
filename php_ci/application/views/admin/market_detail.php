@@ -2,7 +2,7 @@
 <script type="text/javascript" src="/static/js/map.js" charset="utf-8"></script>
 <script type="text/javascript">
 $().ready(function() {
-	$(".code:last").each(function() {
+	$(".code:first").each(function() {
 		$(this).prev().children("button").text("닫기");
 		$(this).show();
 	});
@@ -68,7 +68,10 @@ $().ready(function() {
 
 	$(".btn_update_delivery_location").click(function() {
 		var selected_dong = $(".dong ul").attr("selected_dong");
-		if(selected_dong.length > 0) {
+		if(typeof(selected_dong) == "undefined") {
+			alert("동을 선택해 주세요.");
+			return false;
+		} else if(selected_dong.length > 0) {
 			selected_dong = selected_dong.substr(0, selected_dong.length -1);
 		}
 
@@ -288,6 +291,9 @@ $().ready(function() {
 
 .btn_order_change, .delivery_location span {cursor:pointer;}
 .code {display:none;}
+
+.dong ul {list-style:none; padding:0; margin:0; }
+.dong ul li {display:inline-block; width:120px; list-style:none;}
 </style>
 <div id="body">
 	<input type="hidden" id="market_id" value="<?php echo $market_info->market_id;?>" />
@@ -334,11 +340,11 @@ $().ready(function() {
 				<select name="gugun">
 					<option value="0">선택</option>
 				</select>
+				<input class="btn_update_delivery_location" type="submit" value="배달 지역 변경" />
 			</li>
 			<div class="dong">
 				<ul></ul>
 			</div>
-			<input class="btn_update_delivery_location" type="submit" value="배달 지역 변경" />
 		</ul>
 	</code>
 
