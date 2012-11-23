@@ -40,9 +40,7 @@ class Order_model extends CO_Model {
 			}
 		}
 
-		if($result &&
-				$this->update_order_price($order_id, $order_price, $market_info->delivery_tip) &&
-				$this->insert_order_state_history($order_id, "STANDBY", null, $now_datetime)) {
+		if($result && $this->update_order_price($order_id, $order_price, $market_info->delivery_tip)) {
 			$this->test->trans_complete();
 		} else {
 			$this->test->trans_rollback();
@@ -59,8 +57,7 @@ class Order_model extends CO_Model {
 				"market_id" => $market_info->market_id,
 				"delivery_tip" => $market_info->delivery_tip,
 				"order_user_id" => $order_user_id,
-				"create_datetime" => $now_datetime,
-				"latest_update_order_state_datetime" => $now_datetime,
+				"create_datetime" => $now_datetime
 		);
 		$result_insert = $this->test->insert("tb_order", $data);
 		return $result_insert;
@@ -112,25 +109,6 @@ class Order_model extends CO_Model {
 		}
 
 		return $this->test->where("order_id", $order_id)->update("tb_order", $data);
-	}
-
-	/*
-	 * 주문 내역 상태값 변환에 따른 히스토리 추가
-	 * */
-	private function insert_order_state_history($order_id, $order_state, $order_desc = null, $datetime = false) {
-		if(!$datetime) {
-			$datetime = date("Y-m-d H:i:s");
-		}
-
-		$data = array(
-				"order_id" => $order_id,
-				"order_state" => $order_state,
-				"order_state_desc" => $order_desc,
-				"create_datetime" => $datetime
-		);
-
-		$result_insert = $this->test->insert("tb_order_state_history", $data);
-		return $result_insert;
 	}
 
 	function get_order_info($order_id) {

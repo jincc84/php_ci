@@ -16,7 +16,7 @@ class Menu_model extends CO_Model {
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->insert("menu_category", $data);
+		$this->test->insert("tb_menu_category", $data);
 		return $this->test->insert_id();
 	}
 
@@ -25,7 +25,7 @@ class Menu_model extends CO_Model {
 				"is_delete" => "y",
 				"delete_datetime" => date("Y-m-d H:i:s")
 		);
-		return $this->test->where("menu_category_id", $menu_category_id)->update("menu_category", $data);
+		return $this->test->where("menu_category_id", $menu_category_id)->update("tb_menu_category", $data);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Menu_model extends CO_Model {
 				"market_id" => $market_id,
 				"is_delete" => "n"
 				);
-		return $this->test->get_where("menu_category", $where)->result();
+		return $this->test->get_where("tb_menu_category", $where)->result();
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Menu_model extends CO_Model {
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->insert("menu", $data);
+		$this->test->insert("tb_menu", $data);
 		return $this->test->insert_id();
 	}
 
@@ -70,7 +70,7 @@ class Menu_model extends CO_Model {
 				"menu_image_id" => ($params->menu_image_id == "" ? null : $params->menu_image_id)
 		);
 
-		return $this->test->where("menu_id", $params->menu_id)->update("menu", $data);
+		return $this->test->where("menu_id", $params->menu_id)->update("tb_menu", $data);
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Menu_model extends CO_Model {
 				"is_delete" => "y",
 				"delete_datetime" => date("Y-m-d H:i:s")
 		);
-		return $this->test->where("menu_id", $menu_id)->update("menu", $data);
+		return $this->test->where("menu_id", $menu_id)->update("tb_menu", $data);
 	}
 
 	/**
@@ -95,8 +95,8 @@ class Menu_model extends CO_Model {
 			case "menu_id_unique":
 				$query = "
 					select m.*,
-						(select concat(file_path, file_name) from menu_image where menu_image_id = m.menu_image_id) as menu_image_path
-					from menu m
+						(select concat(file_path, file_name) from tb_menu_image where menu_image_id = m.menu_image_id) as menu_image_path
+					from tb_menu m
 					where is_delete = 'n'
 					and market_id = ?
 				";
@@ -106,10 +106,10 @@ class Menu_model extends CO_Model {
 			default:
 				$query = "
 					select m.menu_id, m.menu_name, m.price, m.fee, a.menu_category_id,
-						(select concat(file_path, file_name) from menu_image where menu_image_id = m.menu_image_id) as menu_image_path
-					from menu m left join (
+						(select concat(file_path, file_name) from tb_menu_image where menu_image_id = m.menu_image_id) as menu_image_path
+					from tb_menu m left join (
 					select mcr.menu_id, mc.menu_category_id, mc.menu_category_name
-					from menu_category_relation mcr, menu_category mc
+					from tb_menu_category_relation mcr, tb_menu_category mc
 					where mcr.menu_category_id = mc.menu_category_id
 					and mc.market_id = ?
 					) a
@@ -130,7 +130,7 @@ class Menu_model extends CO_Model {
 	 * @param unknown $menu_id
 	 */
 	function get_menu_info($menu_id) {
-		return $this->test->get_where("menu", array("menu_id"=>$menu_id))->row();
+		return $this->test->get_where("tb_menu", array("menu_id"=>$menu_id))->row();
 	}
 
 	function insert_menu_image($menu_id, $upload_data) {
@@ -144,12 +144,12 @@ class Menu_model extends CO_Model {
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->insert("menu_image", $data);
+		$this->test->insert("tb_menu_image", $data);
 		return $this->test->insert_id();
 	}
 
 	function update_menu_image($menu_image_id, $data) {
-		return $this->test->where("menu_image_id", $menu_image_id)->update("menu_image", $data);
+		return $this->test->where("menu_image_id", $menu_image_id)->update("tb_menu_image", $data);
 	}
 }
 

@@ -8,7 +8,7 @@ class Market_model extends CO_Model {
 	 * 매장 수 반환
 	 */
 	function get_market_list_count() {
-		return $this->test->where("is_delete", "n")->from("market")->count_all_results();
+		return $this->test->where("is_delete", "n")->from("tb_market")->count_all_results();
 	}
 
 	/**
@@ -24,10 +24,10 @@ class Market_model extends CO_Model {
 		switch($market_image_area) {
 			case "main":
 				$query = "SELECT a.*,
-								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
-								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2,
+								(select concat(file_path, file_name) from tb_market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
+								(select concat(file_path, file_name) from tb_market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2,
 								pr.photo_review_id
-						FROM market a left join photo_review pr
+						FROM tb_market a left join tb_photo_review pr
 						on a.market_id = pr.market_id
 						where a.is_delete = 'n'
 						LIMIT ?,?
@@ -35,7 +35,7 @@ class Market_model extends CO_Model {
 				break;
 			default:
 				$query = "SELECT a.*, pr.photo_review_id
-						FROM market a left join photo_review pr
+						FROM tb_market a left join tb_photo_review pr
 						on a.market_id = pr.market_id
 						where a.is_delete = 'n'
 						LIMIT ?,?
@@ -57,9 +57,9 @@ class Market_model extends CO_Model {
 			case "main":
 				$query = "
 						select a.*,
-								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
-								(select concat(file_path, file_name) from market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2
-				from market
+								(select concat(file_path, file_name) from tb_market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 1 and is_delete = 'n') as img_src1,
+								(select concat(file_path, file_name) from tb_market_image where market_id = a.market_id and market_image_area = 'main' and image_order = 2 and is_delete = 'n') as img_src2
+				from tb_market
 				where a.market_id = ?
 					and a.is_delete = 'n'
 				";
@@ -67,7 +67,7 @@ class Market_model extends CO_Model {
 			default:
 				$query = "
 						select *
-						from market
+						from tb_market
 						where market_id = ?
 						and is_delete = 'n'
 				";
@@ -91,10 +91,11 @@ class Market_model extends CO_Model {
 				"market_address2" => $params->market_address2,
 				"postcd" => $params->postcd,
 				"default_fee" => $params->default_fee,
+				"average_delivery_time" => $params->average_delivery_time,
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->insert("market", $data);
+		$this->test->insert("tb_market", $data);
 		return $this->test->insert_id();
 	}
 
@@ -108,7 +109,7 @@ class Market_model extends CO_Model {
 				"delete_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->where("market_id", $market_id)->update("market", $data);
+		$this->test->where("market_id", $market_id)->update("tb_market", $data);
 	}
 
 	/**
@@ -119,7 +120,7 @@ class Market_model extends CO_Model {
 	function get_market_image_pre_order($market_id, $market_image_area) {
 		$query = "
 				select ifnull(max(image_pre_order),0) + 1 as image_pre_order
-				from market_image
+				from tb_market_image
 				where market_id = ?
 					and market_image_area = ?
 					and is_delete = 'n'
@@ -146,7 +147,7 @@ class Market_model extends CO_Model {
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		$this->test->insert("market_image", $data);
+		$this->test->insert("tb_market_image", $data);
 		return $this->test->insert_id();
 	}
 
@@ -169,7 +170,7 @@ class Market_model extends CO_Model {
 			$order_by = "image_order asc";
 		}
 
-		return $this->test->order_by($order_by)->get_where("market_image", $where)->result();
+		return $this->test->order_by($order_by)->get_where("tb_market_image", $where)->result();
 	}
 
 	/**
@@ -179,7 +180,7 @@ class Market_model extends CO_Model {
 	 */
 	function update_market_image_order($market_id, $market_image_area) {
 		$query = "
-				update market_image
+				update tb_market_image
 				set image_order = image_pre_order
 				where market_id = ?
 					and market_image_area = ?
@@ -193,7 +194,7 @@ class Market_model extends CO_Model {
 	 * @param unknown $where
 	 */
 	function get_market_image_info($where) {
-		return $this->test->get_where("market_image", $where)->row();
+		return $this->test->get_where("tb_market_image", $where)->row();
 	}
 
 	/**
@@ -212,7 +213,7 @@ class Market_model extends CO_Model {
 	}
 
 	private function set_market_image_pre_order($market_image_id, $image_pre_order) {
-		return $this->test->update("market_image", array("image_pre_order"=>$image_pre_order), array("market_image_id"=>$market_image_id));
+		return $this->test->update("tb_market_image", array("image_pre_order"=>$image_pre_order), array("market_image_id"=>$market_image_id));
 	}
 
 	/**
@@ -226,7 +227,7 @@ class Market_model extends CO_Model {
 				"address_dong_id" => $address_dong_id
 		);
 
-		return $this->test->delete("market_delivery_location", $where);
+		return $this->test->delete("tb_market_delivery_location", $where);
 	}
 
 	/**
@@ -253,7 +254,7 @@ class Market_model extends CO_Model {
 	private function delete_delivery_location_gugun($address_gugun_id) {
 		$query = "
 				delete mdl
-				from market_delivery_location mdl, address_dong d, address_gugun g
+				from tb_market_delivery_location mdl, tb_address_dong d, tb_address_gugun g
 				where mdl.address_dong_id = d.address_dong_id
 					and d.address_gugun_id = g.address_gugun_id
 					and g.address_gugun_id = ?
@@ -269,7 +270,7 @@ class Market_model extends CO_Model {
 	 */
 	private function insert_delivery_location($market_id, $dong_list) {
 		$query = "
-				insert into market_delivery_location (market_id, address_dong_id) values
+				insert into tb_market_delivery_location (market_id, address_dong_id) values
 				";
 
 		foreach($dong_list as $address_dong_id) {
@@ -287,7 +288,7 @@ class Market_model extends CO_Model {
 	function get_delivery_location_list($market_id) {
 		$query = "
 				select mdl.address_dong_id, s.sido, g.gugun, d.dong
-				from market_delivery_location mdl, address_dong d, address_gugun g, address_sido s
+				from tb_market_delivery_location mdl, tb_address_dong d, tb_address_gugun g, tb_address_sido s
 				where mdl.address_dong_id = d.address_dong_id
 					and d.address_gugun_id = g.address_gugun_id
 					and g.address_sido_id = s.address_sido_id
@@ -302,7 +303,7 @@ class Market_model extends CO_Model {
 	 * @param unknown $menu_id
 	 */
 	private function delete_menu_category_relation($menu_id) {
-		return $this->test->delete("menu_category_relation", array("menu_id" => $menu_id));
+		return $this->test->delete("tb_menu_category_relation", array("menu_id" => $menu_id));
 	}
 
 	/**
@@ -312,7 +313,7 @@ class Market_model extends CO_Model {
 	 */
 	private function insert_menu_category_relation($menu_id, $menu_category_id_list) {
 		$query = "
-				insert into menu_category_relation (menu_id, menu_category_id) values
+				insert into tb_menu_category_relation (menu_id, menu_category_id) values
 				";
 
 		$where = array();
@@ -341,6 +342,14 @@ class Market_model extends CO_Model {
 
 		$this->test->trans_complete();
 		return $result;
+	}
+
+	function get_market_time_info($market_id, $day) {
+		$where = array(
+				"market_id" => $market_id,
+				"week_day" => strtoupper($day)
+		);
+		return $this->test->get_where("tb_market_time", $where)->row();
 	}
 }
 

@@ -15,27 +15,27 @@ class Address_model extends CO_Model {
 			case "sido":
 				$query = "
 						select address_sido_id, sido
-						from address_sido
+						from tb_address_sido
 				";
 				break;
 			case "gugun":
 				$query = "
 						select address_gugun_id, gugun
-						from address_gugun
+						from tb_address_gugun
 						where address_sido_id = {$address_id}
 				";
 				break;
 			case "dong":
 				$query = "
 						select address_dong_id, dong
-						from address_dong
+						from tb_address_dong
 						where address_gugun_id = '{$address_id}'
 						and is_active = 'Y'
 				";
 
 				$query = "
 						select d.address_dong_id, d.dong, mdl.delivery_location_id
-						from address_dong d left join market_delivery_location mdl
+						from tb_address_dong d left join tb_market_delivery_location mdl
 							on d.address_dong_id = mdl.address_dong_id
 						where address_gugun_id = '{$address_id}'
 						and is_active = 'Y'

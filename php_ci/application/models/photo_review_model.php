@@ -16,7 +16,7 @@ class Photo_review_model extends CO_Model {
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
-		return $this->test->insert("photo_review", $data);
+		return $this->test->insert("tb_photo_review", $data);
 	}
 
 	/**
@@ -29,7 +29,7 @@ class Photo_review_model extends CO_Model {
 				"content" => $content,
 				"latest_update_datetime" => date("Y-m-d H:i:s")
 		);
-		return $this->test->where("photo_review_id", $photo_review_id)->update("photo_review", $data);
+		return $this->test->where("photo_review_id", $photo_review_id)->update("tb_photo_review", $data);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Photo_review_model extends CO_Model {
 	 * @param unknown $photo_review_id
 	 */
 	function delete_photo_review($photo_review_id) {
-		return $this->test->delete("photo_review", array("photo_review_id" => $photo_review_id));
+		return $this->test->delete("tb_photo_review", array("photo_review_id" => $photo_review_id));
 	}
 
 	/**
@@ -45,7 +45,7 @@ class Photo_review_model extends CO_Model {
 	 * @param unknown $market_id
 	 */
 	function get_photo_review_info($market_id) {
-		return $this->test->get_where("photo_review", array("market_id" => $market_id))->row();
+		return $this->test->get_where("tb_photo_review", array("market_id" => $market_id))->row();
 	}
 }
 

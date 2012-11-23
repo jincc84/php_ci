@@ -63,7 +63,6 @@ $().ready(function() {
 </script>
 <style type="text/css">
 #view_img_detail {display:none; position:absolute;}
-.menu_list_area li h4, .menu {cursor:pointer;}
 
 #order_area {position:absolute; right:500px; top:150px; min_width:300px;}
 #orderlist>li>span.btn {cursor:pointer;}
@@ -76,6 +75,8 @@ span.add, span.sub {font-size:12pt;}
 </style>
 <div id="body">
 	<input type="hidden" id="market_id" value="<?php echo $market_info->market_id;?>" />
+	<input type="hidden" id="is_available_order" value="<?php echo $market_info->is_available_order;?>" />
+	<input type="hidden" id="is_order_time" value="<?php echo $market_info->is_order_time;?>" />
 	<div id="view_img_detail"><img width="256" height="192" /></div>
 	<h1>market_detail</h1>
 	<h3>[<?php echo $market_info->market_id . " / " . $market_info->market_name . " / " . $market_info->market_simple_info;?>]</h3>
@@ -112,6 +113,7 @@ span.add, span.sub {font-size:12pt;}
 	<?php		if(isset($menu->menu_image_path)): ?>
 							<img src="<?php echo IMAGE_HOST . str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />
 	<?php		endif; ?>
+							<button class="btn_add_order">주문표에 담기</button>
 						</li>
 					</ul>
 	<?php
@@ -124,22 +126,23 @@ span.add, span.sub {font-size:12pt;}
 					<h4>
 						<span><?php echo $menu_category->menu_category_id . " / " . $menu_category->menu_category_name . " / " . $menu_category->menu_category_type;?></span>
 					</h4>
-	<?php
+<?php
 				if(isset($menu_category->menu_list)):
 					foreach($menu_category->menu_list as $menu):
-	?>
+?>
 					<ul class="menu_area">
 						<li class="menu" menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>">
 							<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price)  . "원";?>
-	<?php		if(isset($menu->menu_image_path)): ?>
+<?php			if(isset($menu->menu_image_path)): ?>
 							<img src="<?php echo IMAGE_HOST . str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />
-	<?php		endif; ?>
+<?php			endif; ?>
+							<button class="btn_add_order">주문표에 담기</button>
 						</li>
 					</ul>
-	<?php
+<?php
 					endforeach;
 				endif;
-	?>
+?>
 				</li>
 <?php	endforeach;?>
 			</ul>

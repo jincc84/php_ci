@@ -38,6 +38,11 @@ var Order = function() {
 			order_list:[]
 	};
 
+	var market = {
+			is_available_order:true,
+			is_order_time:true
+	};
+
 	function _set_menu(_menus) {
 		menus = new Array($(".menu").length);
 		$(".menu").each(function(idx) {
@@ -54,8 +59,16 @@ var Order = function() {
 //		menus = _menus;
 
 		// 메뉴 리스트 클릭 시 주문 혹은 상세 옵션 입력하도록 click 이벤트 추가
-		$(".menu").click(function() {
-			var menu = $(this);
+		$("button.btn_add_order").click(function() {
+			if(!market.is_available_order) {
+				alert("매장에서 주문 접수를 일시 받지 않습니다.");
+				return;
+			} else if(!market.is_order_time) {
+				alert("주문 접수 시간이 아닙니다.");
+				return;
+			}
+
+			var menu = $(this).parent();
 			if(orders.order_list.length < orders.max_order_count) {
 				$.get("/service/menu/get_option", {
 					menu_id: menu.attr("menu_id")
@@ -276,12 +289,24 @@ var Order = function() {
 		return n;
 	}
 
+	function _set_market() {
+		market.is_available_order = $("#is_available_order").val() == "Y";
+		market.is_order_time = $("#is_order_time").val() == "Y";
+
+		if(!(market.is_available_order && market.is_order_time)) {
+			$("button.btn_add_order").attr("disabled", "disabled");
+			$("#btn_order").attr("disabled", "disabled");
+		}
+	}
+
 	return {
 		init: function(menus) {
 			_set_menu(menus);
+			_set_market();
 		},
 		init_standby: function(orders) {
 			_init_standby(orders);
+			_set_market();
 		},
 		set_option: function() {
 			var is_success = true;

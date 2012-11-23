@@ -16,15 +16,15 @@ class Autocomplete_model extends CO_Model {
 
 		$query = "
 			select s.sido, g.gugun, d.dong, CONCAT(s.sido, ' ', g.gugun, ' ', d.dong) as address, d.address_dong_id as address_id, d.part
-			from address_sido s, address_gugun g, (
+			from tb_address_sido s, tb_address_gugun g, (
 				select b.address_dong_id, a.address_sido_id, b.address_gugun_id, b.dong, 1 as part
-				from address_gugun a, address_dong b
+				from tb_address_gugun a, tb_address_dong b
 				where a.address_gugun_id = b.address_gugun_id
 					and b.dong like '{$keyword}%'
 					and b.is_active = 'Y'
 				union
 				select b.address_dong_id, a.address_sido_id, b.address_gugun_id, b.dong, 2 as part
-				from address_gugun a, address_dong b
+				from tb_address_gugun a, tb_address_dong b
 				where a.address_gugun_id = b.address_gugun_id
 					and a.gugun like '{$keyword}%'
 					and b.is_active = 'Y') d
