@@ -55,6 +55,10 @@ var category = {
 						id:600,
 						name:"smart_editor",
 						url:"/prototype/smart_editor"
+					}, {
+						id:700,
+						name:"option",
+						url:"/prototype/option"
 					}
 			)
 		}),

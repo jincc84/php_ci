@@ -10,7 +10,6 @@ class Market extends CO_Controller {
 	public function lists($cur_page = 1) {
 		//$this->load->helper(array("form", "url"));
 		//$this->load_library("form_validation");
-
 		$count_per_page = 10;
 
 		$this->load->model('market_model');
@@ -42,7 +41,7 @@ class Market extends CO_Controller {
 			$market_info->is_order_time = ($market_time_info->open_time <= $now_time && $market_time_info->close_time >= $now_time) ? "Y" : "N";
 
 			// 휴일 체크
-			if($market_info->is_order_time == "Y" && $market_info->is_holiday == "Y") {
+			if($market_info->is_order_time == "Y" && $market_time_info->is_holiday == "Y") {
 				$market_info->is_order_time = $this->get_is_order_time_by_holiday_type($market_info->holiday_type);
 			}
 
