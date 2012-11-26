@@ -8,7 +8,18 @@ class Option extends CO_Controller {
 	{
 		$this->layout->set_layout('layout/layout_main');
 
-		$data = array();
+		$this->load->model("menu_option_model");
+
+		$menu_id = 5;
+		$menu_option_group_list = $this->menu_option_model->get_menu_option_group_list($menu_id);
+		if(count($menu_option_group_list) > 0) {
+			foreach($menu_option_group_list as &$menu_option_group) {
+				$menu_option_group->menu_option_list = $this->menu_option_model->get_menu_option_list($menu_option_group->menu_option_group_id);
+			}
+		}
+		$data = array(
+				"menu_option_group_list" => $menu_option_group_list
+		);
 
 		$this->layout->view('prototype/option', $data);
 	}
