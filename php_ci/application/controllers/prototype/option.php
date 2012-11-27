@@ -3,9 +3,7 @@
 require_once APPPATH.'core/CO_Controller.php';
 
 class Option extends CO_Controller {
-
-	public function index()
-	{
+	public function index() {
 		$this->layout->set_layout('layout/layout_main');
 
 		$this->load->model("menu_option_model");
@@ -22,5 +20,18 @@ class Option extends CO_Controller {
 		);
 
 		$this->layout->view('prototype/option', $data);
+	}
+
+	public function modify() {
+		$params = $this->get_params();
+
+		$available_option_info = json_decode($params->available_option_info, true);
+		var_dump($available_option_info);
+
+		$result = array(
+				"result"=>true
+		);
+
+		echo json_encode($result);
 	}
 }

@@ -167,9 +167,10 @@ class Menu extends CO_Controller {
 
 		$params = $this->get_params("post");
 
-		$result = $this->menu_model->delete_menu($params->menu_id) &&
-						$this->menu_option_model->delete_menu_option_group_by_menu($params->menu_id) &&
-						$this->menu_option_model->delete_menu_option_by_menu($params->menu_id);
+		$result = $this->menu_model->delete_menu($params->menu_id);
+// 		$result = $this->menu_model->delete_menu($params->menu_id) &&
+// 						$this->menu_option_model->delete_menu_option_group_by_menu($params->menu_id) &&
+// 						$this->menu_option_model->delete_menu_option_by_menu($params->menu_id);
 
 		redirect("/admin/menu/lists/" . $params->market_id, "refresh");
 	}
@@ -210,5 +211,20 @@ class Menu extends CO_Controller {
 		}
 
 		echo json_encode($result);
+	}
+
+	/**
+	 * 옵션 그룹 + 옵션 내용 추가/수정/삭제 처리
+	 */
+	public function modify_option() {
+		$params = $this->get_params();
+
+		$available_option_info = json_decode($params->available_option_info, true);
+		$menu_id = $params->menu_id;
+
+		$this->load->model("menu_option_model");
+		$result = $this->menu_option_model->modify_option($menu_id, $available_option_info);
+
+		echo $result;
 	}
 }

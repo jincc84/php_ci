@@ -5,7 +5,10 @@ var option = function() {
 	};
 
 	var available_option_info = {
-			insert:new Array(),
+			insert:{
+				option_group:new Array(),
+				option:new Array()
+			},
 			update:{
 				option_group:new Array(),
 				option:new Array()
@@ -17,11 +20,13 @@ var option = function() {
 	};
 
 	function init_available_option_info() {
-		available_option_info.insert = new Array();
+		available_option_info.insert.option_group = new Array();
+		available_option_info.insert.option = new Array();
 		available_option_info.update.option_group = new Array();
 		available_option_info.update.option = new Array();
-		available_option_info.remove.option_group_id = new Array();
-		available_option_info.remove.option_id = new Array();
+		// 삭제된 id array list 는 계속 갖고 있어야 한다.
+//		available_option_info.remove.option_group_id = new Array();
+//		available_option_info.remove.option_id = new Array();
 	}
 
 	// 옵션 그룹 추가 버튼 세팅
@@ -55,9 +60,8 @@ var option = function() {
 
 		target.click(function() {
 			var option_group_id = $(this).parent().parent().attr("menu_option_group_id");
-
 			if(typeof(option_group_id) != "undefined") {
-				available_option_info.remove.option_group_id.push();
+				available_option_info.remove.option_group_id.push(option_group_id);
 			}
 
 			$(this).parent().parent().remove();
@@ -72,9 +76,8 @@ var option = function() {
 
 		target.click(function() {
 			var option_id = $(this).parent().attr("menu_option_id");
-
 			if(typeof(option_id) != "undefined") {
-				available_option_info.remove.option_id.push();
+				available_option_info.remove.option_id.push(option_id);
 			}
 
 			$(this).parent().remove();
@@ -118,7 +121,7 @@ var option = function() {
 					var option_list = new Array();
 					$(this).children("td").eq(1).children("p").each(function() {
 						var option_info = {
-								option_name:$(this).children("input[name=option_name]").val(),
+								menu_option_name:$(this).children("input[name=menu_option_name]").val(),
 								add_price:$(this).children("input[name=add_price]").val()
 						};
 
@@ -126,14 +129,14 @@ var option = function() {
 					});
 
 					var insert_info = {
-							option_group_name:$(this).children("td:first").children("input").val(),
+							menu_option_group_name:$(this).children("td").eq(0).children("input").val(),
 							is_essential:$(this).children("td").eq(2).children("select").val(),
 							max_select:$(this).children("td").eq(3).children("select").val(),
-							option_list:option_list
+							option_list:option_list // insert option
 					};
 
-					available_option_info.insert.push(insert_info);
-				} else { // update option group
+					available_option_info.insert.option_group.push(insert_info);
+				} else { // update
 					var menu_option_group_id = $(this).attr("menu_option_group_id");
 					var origin_menu_option_group_info = {
 							"menu_option_group_name": $(this).children("td").eq(0).children("input[name=menu_option_group_name]").attr("origin"),
@@ -148,33 +151,47 @@ var option = function() {
 
 					if(origin_menu_option_group_info.menu_option_group_name != menu_option_group_info.menu_option_group_name ||
 							origin_menu_option_group_info.is_essential != menu_option_group_info.is_essential ||
-							origin_menu_option_group_info.max_select != menu_option_group_info.max_select) {
+							origin_menu_option_group_info.max_select != menu_option_group_info.max_select) { // update option_group
 						menu_option_group_info.menu_option_group_id = menu_option_group_id;
 						available_option_info.update.option_group.push(menu_option_group_info);
 					}
 
 					$(this).children("td").eq(1).children("p").each(function() {
 						var menu_option_id = $(this).attr("menu_option_id");
-						var origin_menu_option_info = {
-								"menu_option_name": $(this).children("input[name=menu_option_name]").attr("origin"),
-								"add_price": $(this).children("input[name=add_price]").attr("origin")
-						};
-						var menu_option_info = {
-								"menu_option_name": $(this).children("input[name=menu_option_name]").val(),
-								"add_price": $(this).children("input[name=add_price]").val()
-						};
+						if(isNaN(menu_option_id)) { // insert option
+							var menu_option_info = {
+									"menu_option_group_id": menu_option_group_id,
+									"menu_option_name": $(this).children("input[name=menu_option_name]").val(),
+									"add_price": $(this).children("input[name=add_price]").val()
+							};
 
-						if(origin_menu_option_info.menu_option_name != menu_option_info.menu_option_name ||
-								origin_menu_option_info.add_price != menu_option_info.add_price) {
-							menu_option_info.menu_option_id = menu_option_id;
-							available_option_info.update.option.push(menu_option_info);
+							available_option_info.insert.option.push(menu_option_info);
+						} else { // update option
+							var origin_menu_option_info = {
+									"menu_option_name": $(this).children("input[name=menu_option_name]").attr("origin"),
+									"add_price": $(this).children("input[name=add_price]").attr("origin")
+							};
+							var menu_option_info = {
+									"menu_option_name": $(this).children("input[name=menu_option_name]").val(),
+									"add_price": $(this).children("input[name=add_price]").val()
+							};
+
+							if(origin_menu_option_info.menu_option_name != menu_option_info.menu_option_name ||
+									origin_menu_option_info.add_price != menu_option_info.add_price) {
+								menu_option_info.menu_option_id = menu_option_id;
+								available_option_info.update.option.push(menu_option_info);
+							}
 						}
 					});
 				}
 			});
 
-			alert(available_option_info.update.option_group.length);
-			alert(available_option_info.update.option.length);
+			$.get("/admin/menu/modify_option", {
+				menu_id:$("#menu_id").val(),
+				available_option_info: JSON.stringify(available_option_info)
+			}, function(result) {
+				alert(eval(result));
+			});
 		});
 	}
 

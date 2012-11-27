@@ -1,42 +1,12 @@
+<script type="text/javascript" src="/static/js/option.js"></script>
 <script type="text/javascript">
 $().ready(function() {
-	$(".btn_add_menu_option").click(function() {
-		$("#add_menu_option_area h4 span").text($(this).parent().children("span").text());
-		$("#insert_menu_option_form input[name=menu_option_group_id]").val($(this).parent().parent().attr("menu_option_group_id"));
-
-		$("#add_menu_option_group_area").hide();
-		$("#add_menu_option_area").show();
-	});
-
-	$(".btn_delete_menu_option_group").click(function() {
-		var area = $(this).parent().parent();
-		$.ajax({
-			url:"/admin/menu_option/delete_group/" + area.attr("menu_option_group_id"),
-			dataType:"json",
-			success:function(result) {
-				if(eval(result)) {
-					area.remove();
-				} else {
-					alert("옵션 그룹 삭제 실패");
-				}
-			}
-		});
-	});
-
-	$("#btn_cancel_add_menu_option").click(function() {
-		$("#add_menu_option_area").hide();
-		$("#insert_menu_option_form input[type=text]").val("");
-		$("#add_menu_option_group_area").show();
-	});
-
-	$(".btn_delete_menu_option").click(function() {
-		$("#delete_menu_option_form input[name=menu_option_id]").val($(this).attr("menu_option_id"));
-		$("#delete_menu_option_form").submit();
-	});
+	option.init();
 });
 </script>
 <style type="text/css">
-#add_menu_option_area {display:none;}
+#menu_option_list p {padding:0; margin:5px;}
+#add_menu_option_group_row {display:none;}
 </style>
 <div id="body">
 	<h1>menu_detail</h1>
@@ -44,78 +14,77 @@ $().ready(function() {
 	<h3>[<?php echo $menu_info->menu_id . " / " . $menu_info->menu_name . " / " . $menu_info->price;?>]</h3>
 	<h4>메뉴 옵션 그룹</h4>
 	<code>
-		<ul>
-			<li>
-				옵션 그룹 아이디 / 옵션 그룹명 / 필수 여부 / 최대 선택 수
-				<ul>
-					<li>옵션 아이디 / 옵션명 / 추가 가격</li>
-				</ul>
-			</li>
-<?php
-	foreach($menu_option_group_list as $menu_option_group) {
-?>
-			<li class="menu_option_group_area" menu_option_group_id="<?php echo $menu_option_group->menu_option_group_id;?>">
-				<h4>
-					<span><?php echo $menu_option_group->menu_option_group_id . " / " . $menu_option_group->menu_option_group_name . " / " . $menu_option_group->is_essential . " / " . $menu_option_group->max_select;?></span>
-					<input type="button" value="옵션 추가" class="btn_add_menu_option" />
-					<input type="button" value="옵션 그룹 삭제" class="btn_delete_menu_option_group" />
-				</h4>
-<?php
-		if(isset($menu_option_group->menu_option_list)) {
-			foreach($menu_option_group->menu_option_list as $menu_option) {
-?>
-				<ul>
-					<li>
-						<?php echo $menu_option->menu_option_id . " / " . $menu_option->menu_option_name . " / " . number_format($menu_option->add_price);?>
-						<input type="button" class="btn_delete_menu_option" menu_option_id="<?php echo $menu_option->menu_option_id;?>" value="옵션 삭제" />
-					</li>
-				</ul>
-<?php
-			}
-		}
-?>
-			</li>
-<?php
-	}
-?>
-		</ul>
+		<table id="menu_option_list">
+		<tr>
+			<th>옵션명(예:사이즈)</th>
+			<th>항목(예:곱배기) / 추가금액</th>
+			<th>선택 필수여부</th>
+			<th>항목 선택</th>
+			<th>-</th>
+		</tr>
+<?php foreach($menu_option_group_list as $menu_option_group):?>
+		<tr menu_option_group_id="<?php echo $menu_option_group->menu_option_group_id;?>">
+			<td><input type="text" name="menu_option_group_name" origin="<?php echo $menu_option_group->menu_option_group_name;?>" value="<?php echo $menu_option_group->menu_option_group_name;?>" /></td>
+			<td>
+<?php 	foreach($menu_option_group->menu_option_list as $menu_option):?>
+				 <p menu_option_id="<?php echo $menu_option->menu_option_id;?>"><input type="text" name="menu_option_name" origin="<?php echo $menu_option->menu_option_name;?>" value="<?php echo $menu_option->menu_option_name;?>" /> / <input type="text" name="add_price" origin="<?php echo $menu_option->add_price;?>" value="<?php echo $menu_option->add_price;?>" />원 <button class="btn_remove_menu_option">삭제</button></p>
+<?php 	endforeach;?>
+			</td>
+			<td>
+				<select name="is_essential" origin="<?php echo $menu_option_group->is_essential;?>">
+					<option value="Y" <?php echo $menu_option_group->is_essential == "Y" ? "selected=selected" : "";?>>필수</option>
+					<option value="N" <?php echo $menu_option_group->is_essential == "N" ? "selected=selected" : "";?>>선택</option>
+				</select>
+			</td>
+			<td>
+				<select name="max_select" origin="<?php echo $menu_option_group->max_select;?>">
+					<option value="1" <?php echo $menu_option_group->max_select == 1 ? "selected=selected" : "";?>>1</option>
+					<option value="2" <?php echo $menu_option_group->max_select == 2 ? "selected=selected" : "";?>>2</option>
+					<option value="3" <?php echo $menu_option_group->max_select == 3 ? "selected=selected" : "";?>>3</option>
+					<option value="4" <?php echo $menu_option_group->max_select == 4 ? "selected=selected" : "";?>>4</option>
+					<option value="5" <?php echo $menu_option_group->max_select == 5 ? "selected=selected" : "";?>>5</option>
+				</select>
+			</td>
+			<td>
+				<button class="btn_add_menu_option">옵션추가</button>
+				<button class="btn_remove_menu_option_group">옵션그룹삭제</button>
+			</td>
+		</tr>
+<?php endforeach;?>
+		</table>
+		<button id="btn_add_menu_option_group">옵션그룹추가</button>
+		<p>
+			<button id="btn_apply_menu_option">적용</button>
+		</p>
 	</code>
-	<div id="add_menu_option_group_area">
-		<h4>옵션 그룹 추가</h4>
-		<code>
-<?php echo validation_errors(); ?>
-<?php echo form_open("admin/menu_option/insert_group", array("id"=>"menu_option_group_form")); ?>
-			<ul>
-				<li>옵션 그룹명 : <input type="text" name="menu_option_group_name" /></li>
-				<li>필수 여부 : <input type="checkbox" name="is_essential" /></li>
-				<li>최대 선택 개수 : <input type="text" name="max_select" /></li>
-			</ul>
-			<input type="submit" value="추가" />
-			<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
-			<input type="hidden" name="menu_id" value="<?php echo $menu_info->menu_id;?>" />
-		</form>
-		</code>
-	</div>
-	<div id="add_menu_option_area">
-		<h4><span></span> 옵션 추가</h4>
-		<code>
-<?php echo validation_errors(); ?>
-<?php echo form_open("admin/menu_option/insert", array("id"=>"insert_menu_option_form")); ?>
-			<ul>
-				<li>옵션명 : <input type="text" name="menu_option_name" /></li>
-				<li>추가 가격 : <input type="text" name="add_price" /></li>
-			</ul>
-			<input type="submit" value="추가" />
-			<input type="button" value="취소" id="btn_cancel_add_menu_option" />
-			<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
-			<input type="hidden" name="menu_id" value="<?php echo $menu_info->menu_id;?>" />
-			<input type="hidden" name="menu_option_group_id" />
-		</form>
-		</code>
-	</div>
+
+	<!-- 옵션그룹 추가용 html -->
+	<table id="add_menu_option_group_row">
+		<tr>
+			<td><input type="text" name="menu_option_group_name" /></td>
+			<td>
+				<p><input type="text" name="menu_option_name" /> / <input type="text" name="add_price" />원 <button class="btn_remove_menu_option">삭제</button></p>
+			</td>
+			<td>
+				<select name="is_essential">
+					<option value="Y">필수</option>
+					<option value="N">선택</option>
+				</select>
+			</td>
+			<td>
+				<select name="max_select">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
+			</td>
+			<td>
+				<button class="btn_add_menu_option">옵션추가</button>
+				<button class="btn_remove_menu_option_group">옵션그룹삭제</button>
+			</td>
+		</tr>
+	</table>
 </div>
-<?php echo form_open("admin/menu_option/delete", array("id"=>"delete_menu_option_form")); ?>
-	<input type="hidden" name="market_id" value="<?php echo $market_info->market_id;?>" />
-	<input type="hidden" name="menu_id" value="<?php echo $menu_info->menu_id;?>" />
-	<input type="hidden" name="menu_option_id" />
-</form>
+<input type="hidden" id="menu_id" name="menu_id" value="<?php echo $menu_info->menu_id;?>" />

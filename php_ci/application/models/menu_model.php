@@ -133,6 +133,11 @@ class Menu_model extends CO_Model {
 		return $this->test->get_where("tb_menu", array("menu_id"=>$menu_id))->row();
 	}
 
+	/**
+	 * 메뉴 이미지 추가
+	 * @param unknown $menu_id
+	 * @param unknown $upload_data
+	 */
 	function insert_menu_image($menu_id, $upload_data) {
 		$data = array(
 				"menu_id" => ($menu_id == "" ? null : $menu_id),
@@ -148,6 +153,11 @@ class Menu_model extends CO_Model {
 		return $this->test->insert_id();
 	}
 
+	/**
+	 * 메뉴 이미지 수정
+	 * @param unknown $menu_image_id
+	 * @param unknown $data
+	 */
 	function update_menu_image($menu_image_id, $data) {
 		return $this->test->where("menu_image_id", $menu_image_id)->update("tb_menu_image", $data);
 	}
