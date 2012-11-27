@@ -13,8 +13,7 @@ class Order_model extends CO_Model {
 		$this->load->model("menu_model");
 		$this->load->model("menu_option_model");
 
-		$this->insert($market_info, $order_user_id, $now_datetime);
-		if(!$this->test->trans_status()) {
+		if(!$this->insert($market_info, $order_user_id, $now_datetime)) {
 			$this->test->trans_rollback();
 			return false;
 		}
@@ -24,9 +23,7 @@ class Order_model extends CO_Model {
 		$order_price = 0;
 		foreach($order["order_list"] as $menu) {
 			$menu_info = $this->menu_model->get_menu_info($menu["menu_id"]);
-			$this->insert_order_menu($order_id, $menu_info, $menu["count"]);
-
-			if(!$this->test->trans_status()) {
+			if(!$this->insert_order_menu($order_id, $menu_info, $menu["count"])) {
 				$this->test->trans_rollback();
 				return false;
 			}
@@ -35,8 +32,7 @@ class Order_model extends CO_Model {
 			$order_menu_id = $this->test->insert_id();
 			foreach($menu["menu_option_list"] as $option) {
 				$option_info = $this->menu_option_model->get_menu_option_info($option["menu_option_id"]);
-				$this->insert_order_menu_option($order_menu_id, $option_info);
-				if(!$this->test->trans_status()) {
+				if(!$this->insert_order_menu_option($order_menu_id, $option_info)) {
 					$this->test->trans_rollback();
 					return false;
 				}
@@ -48,8 +44,7 @@ class Order_model extends CO_Model {
 			$order_price += ($menu_price + $option_price) * $menu["count"];
 		}
 
-		$this->update_order_price($order_id, $order_price, $market_info->delivery_tip);
-		if(!$this->test->trans_status()) {
+		if(!$this->update_order_price($order_id, $order_price, $market_info->delivery_tip)) {
 			$this->test->trans_rollback();
 			return false;
 		} else {
@@ -85,7 +80,7 @@ class Order_model extends CO_Model {
 				"order_state" => $order_state,
 				"create_datetime" => $now_datetime
 		);
-		$result_insert = $this->test->insert("tb_order_datetime", $data);
+		return $this->test->insert("tb_order_datetime", $data);
 	}
 
 	/*
@@ -102,8 +97,7 @@ class Order_model extends CO_Model {
 // 				"total_price" => (isset($menu->discount_price) ? $menu->discount_price : $menu->price) * $count,
 		);
 
-		$result_insert = $this->test->insert("tb_order_menu", $data);
-		return $result_insert;
+		return $this->test->insert("tb_order_menu", $data);
 	}
 
 	/*
