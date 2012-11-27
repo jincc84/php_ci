@@ -108,7 +108,7 @@ span.add, span.sub {font-size:12pt;}
 				foreach($menu_list as $menu):
 	?>
 					<ul class="menu_area">
-						<li class="menu" menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>">
+						<li class="menu" menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>">
 							<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price)  . "원";?>
 	<?php		if(isset($menu->menu_image_path)): ?>
 							<img src="<?php echo IMAGE_HOST . str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />
@@ -131,7 +131,7 @@ span.add, span.sub {font-size:12pt;}
 					foreach($menu_category->menu_list as $menu):
 ?>
 					<ul class="menu_area">
-						<li class="menu" menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>">
+						<li class="menu" menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>">
 							<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price)  . "원";?>
 <?php			if(isset($menu->menu_image_path)): ?>
 							<img src="<?php echo IMAGE_HOST . str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />

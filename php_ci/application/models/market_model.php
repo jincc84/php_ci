@@ -90,7 +90,7 @@ class Market_model extends CO_Model {
 				"market_address1" => $params->market_address1,
 				"market_address2" => $params->market_address2,
 				"postcd" => $params->postcd,
-				"default_fee" => $params->default_fee,
+				"fee" => $params->fee,
 				"average_delivery_time" => $params->average_delivery_time,
 				"create_datetime" => date("Y-m-d H:i:s")
 		);

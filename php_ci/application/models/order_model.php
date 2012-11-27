@@ -5,48 +5,58 @@ class Order_model extends CO_Model {
 	}
 
 	/*
-	 * 주문 준비 단계 처리(트랜잭션)
+	 * 주문 준비 단계 처리(트랜잭션 처리)
 	 * */
 	function order_standby($market_info, $order_user_id, $order, $now_datetime) {
-		$this->test->trans_start();
+		$this->test->trans_begin();
 
 		$this->load->model("menu_model");
 		$this->load->model("menu_option_model");
-		$result = $this->insert($market_info, $order_user_id, $now_datetime);
-		if($result) {
-			$order_id = $this->test->insert_id();
-			$order_price = 0;
-			foreach($order["order_list"] as $menu) {
-				$menu_info = $this->menu_model->get_menu_info($menu["menu_id"]);
-				$result = $this->insert_order_menu($order_id, $menu_info, $menu["count"]);
-				$option_price = 0;
-				if($result) {
-					$order_menu_id = $this->test->insert_id();
-					foreach($menu["menu_option_list"] as $option) {
-						$option_info = $this->menu_option_model->get_menu_option_info($option["menu_option_id"]);
-						$result = $this->insert_order_menu_option($order_menu_id, $option_info);
-						if(!$result) {
-							break;
-						}
 
-						$option_price += isset($option_info->discount_add_price) ? $option_info->discount_add_price : $option_info->add_price;
-					}
-				} else {
-					break;
+		$this->insert($market_info, $order_user_id, $now_datetime);
+		if(!$this->test->trans_status()) {
+			$this->test->trans_rollback();
+			return false;
+		}
+
+		$order_id = $this->test->insert_id();
+		$this->insert_order_datetime($order_id, "STANDBY", $now_datetime);
+		$order_price = 0;
+		foreach($order["order_list"] as $menu) {
+			$menu_info = $this->menu_model->get_menu_info($menu["menu_id"]);
+			$this->insert_order_menu($order_id, $menu_info, $menu["count"]);
+
+			if(!$this->test->trans_status()) {
+				$this->test->trans_rollback();
+				return false;
+			}
+
+			$option_price = 0;
+			$order_menu_id = $this->test->insert_id();
+			foreach($menu["menu_option_list"] as $option) {
+				$option_info = $this->menu_option_model->get_menu_option_info($option["menu_option_id"]);
+				$this->insert_order_menu_option($order_menu_id, $option_info);
+				if(!$this->test->trans_status()) {
+					$this->test->trans_rollback();
+					return false;
 				}
 
-				$menu_price = isset($menu_info->_price) ? $menu_info->discount_price : $menu_info->price;
-				$order_price += ($menu_price + $option_price) * $menu["count"];
+				$option_price += isset($option_info->discount_add_price) ? $option_info->discount_add_price : $option_info->add_price;
 			}
+
+			$menu_price = isset($menu_info->_price) ? $menu_info->discount_price : $menu_info->price;
+			$order_price += ($menu_price + $option_price) * $menu["count"];
 		}
 
-		if($result && $this->update_order_price($order_id, $order_price, $market_info->delivery_tip)) {
-			$this->test->trans_complete();
-		} else {
+		$this->update_order_price($order_id, $order_price, $market_info->delivery_tip);
+		if(!$this->test->trans_status()) {
 			$this->test->trans_rollback();
+			return false;
+		} else {
+			$this->test->trans_commit();
 		}
 
-		return $result ? $order_id : $result;
+		return $order_id;
 	}
 
 	/*
@@ -57,10 +67,25 @@ class Order_model extends CO_Model {
 				"market_id" => $market_info->market_id,
 				"delivery_tip" => $market_info->delivery_tip,
 				"order_user_id" => $order_user_id,
+				"fee" => $market_info->fee,
 				"create_datetime" => $now_datetime
 		);
-		$result_insert = $this->test->insert("tb_order", $data);
-		return $result_insert;
+		return $this->test->insert("tb_order", $data);
+	}
+
+	/*
+	 * 주문 내역 상태 변경 날짜 기록
+	 * */
+	private function insert_order_datetime($order_id, $order_state, $now_datetime) {
+		if(!$now_datetime) {
+			$now_datetime = date("Y-m-d H:i:s");
+		}
+		$data = array(
+				"order_id" => $order_id,
+				"order_state" => $order_state,
+				"create_datetime" => $now_datetime
+		);
+		$result_insert = $this->test->insert("tb_order_datetime", $data);
 	}
 
 	/*
@@ -75,7 +100,6 @@ class Order_model extends CO_Model {
 				"discount_price" => (isset($menu->discount_price) ? $menu->discount_price : null),
 				"count" => $count,
 // 				"total_price" => (isset($menu->discount_price) ? $menu->discount_price : $menu->price) * $count,
-				"fee" => $menu->fee
 		);
 
 		$result_insert = $this->test->insert("tb_order_menu", $data);

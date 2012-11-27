@@ -86,7 +86,7 @@ class Market extends CO_Controller {
 		$this->form_validation->set_rules("postcd", "postcd", "required|numeric");
 		$this->form_validation->set_rules("market_address1", "market_address1", "required");
 		$this->form_validation->set_rules("market_address2", "market_address2", "required");
-		$this->form_validation->set_rules("default_fee", "default_fee", "required|is_natural");
+		$this->form_validation->set_rules("fee", "fee", "required|is_natural");
 		$this->form_validation->set_rules("average_delivery_time", "average_delivery_time", "required|is_natural");
 		$form_result = $this->form_validation->run();
 

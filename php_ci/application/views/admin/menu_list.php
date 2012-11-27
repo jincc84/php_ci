@@ -60,7 +60,6 @@ $().ready(function() {
 		$("#update_menu_form input[name=menu_id]").val($(this).parent().attr("menu_id"));
 		$("#update_menu_form input[name=menu_name]").val($(this).parent().attr("menu_name"));
 		$("#update_menu_form input[name=price]").val($(this).parent().attr("price"));
-		$("#update_menu_form input[name=fee]").val($(this).parent().attr("fee"));
 
 		if($(this).parent().children("img").attr("src")) {
 			$("#update_menu_form .menu_image_full_path").text($(this).parent().children("img").attr("src"));
@@ -210,11 +209,11 @@ $().ready(function() {
 			foreach($menu_list as $menu) {
 ?>
 				<ul>
-					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>" has_image="<?php echo isset($menu->menu_image_path);?>">
+					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" has_image="<?php echo isset($menu->menu_image_path);?>">
 <?php		if(isset($menu->menu_image_path)):?>
 						<img src="http://image.test.com<?php echo str_replace("/test_upload", "", $menu->menu_image_path);?>" width="25" height="19" class="menu_image" />
 <?php		endif;?>
-						<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price) . " / " . $menu->fee . "%";?>
+						<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price);?>
 						<input type="button" class="btn_delete_menu" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 삭제" />
 						<input type="button" class="btn_show_update_menu_area" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 수정" />
 						<input type="button" class="btn_menu_detail" market_id="<?php echo $market_info->market_id;?>" menu_id="<?php echo $menu->menu_id;?>" value="상세" />
@@ -248,8 +247,8 @@ $().ready(function() {
 			foreach($menu_category->menu_list as $menu) {
 ?>
 				<ul>
-					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>" fee="<?php echo $menu->fee;?>">
-						<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price) . " / " . $menu->fee . "%";?>
+					<li menu_id="<?php echo $menu->menu_id;?>" menu_name="<?php echo $menu->menu_name;?>" price="<?php echo $menu->price;?>">
+						<?php echo $menu->menu_id . " / " . $menu->menu_name . " / " . number_format($menu->price);?>
 						<input type="button" class="btn_delete_menu" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 삭제" />
 						<input type="button" class="btn_show_update_menu_area" menu_id="<?php echo $menu->menu_id;?>" value="메뉴 수정" />
 						<input type="button" class="btn_menu_detail" market_id="<?php echo $market_info->market_id;?>" menu_id="<?php echo $menu->menu_id;?>" value="상세" />
@@ -292,7 +291,6 @@ $().ready(function() {
 					<input type="hidden" name="menu_image_id" />
 					<li>메뉴명 : <input type="text" name="menu_name" /></li>
 					<li>가격 : <input type="text" name="price" /></li>
-					<li>수수료 : <input type="text" name="fee" value="<?php echo $market_info->default_fee;?>" /> %</li>
 				</form>
 				<?php echo form_open_multipart(null, array("id"=>"upload_menu_image_form_insert"));?>
 					<li>
@@ -320,7 +318,6 @@ $().ready(function() {
 					<input type="hidden" name="menu_image_id" />
 					<li>메뉴명 : <input type="text" name="menu_name" /></li>
 					<li>가격 : <input type="text" name="price" /></li>
-					<li>수수료 : <input type="text" name="fee" /> %</li>
 					<li>
 						이미지 파일 경로 : <span class="menu_image_full_path" />
 					</li>

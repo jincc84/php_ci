@@ -113,7 +113,6 @@ class Menu extends CO_Controller {
 
 		$this->form_validation->set_rules("menu_name", "menu_name", "required");
 		$this->form_validation->set_rules("price", "price", "required|numeric");
-		$this->form_validation->set_rules("fee", "fee", "required|numeric");
 		$form_result = $this->form_validation->run();
 
 		$params = $this->get_params("post");
@@ -142,7 +141,6 @@ class Menu extends CO_Controller {
 
 		$this->form_validation->set_rules("menu_name", "menu_name", "required");
 		$this->form_validation->set_rules("price", "price", "required|numeric");
-		$this->form_validation->set_rules("fee", "fee", "required|is_natural");
 		$form_result = $this->form_validation->run();
 
 		$params = $this->get_params("post");

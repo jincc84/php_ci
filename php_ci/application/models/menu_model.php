@@ -50,7 +50,6 @@ class Menu_model extends CO_Model {
 				"menu_image_id" => $params->menu_image_id,
 				"menu_name" => $params->menu_name,
 				"price" => $params->price,
-				"fee" => $params->fee,
 				"create_datetime" => date("Y-m-d H:i:s")
 		);
 
@@ -66,7 +65,6 @@ class Menu_model extends CO_Model {
 		$data = array(
 				"menu_name" => $params->menu_name,
 				"price" => $params->price,
-				"fee" => $params->fee,
 				"menu_image_id" => ($params->menu_image_id == "" ? null : $params->menu_image_id)
 		);
 
@@ -105,7 +103,7 @@ class Menu_model extends CO_Model {
 				break;
 			default:
 				$query = "
-					select m.menu_id, m.menu_name, m.price, m.fee, a.menu_category_id,
+					select m.menu_id, m.menu_name, m.price, a.menu_category_id,
 						(select concat(file_path, file_name) from tb_menu_image where menu_image_id = m.menu_image_id) as menu_image_path
 					from tb_menu m left join (
 					select mcr.menu_id, mc.menu_category_id, mc.menu_category_name

@@ -74,7 +74,7 @@ code {position:relative;}
 					<li>매장 주소2(상세) : <input name="market_address2" class="address" value="<?php echo $params->market_address2;?>" /></li>
 				</ul>
 			</li>
-			<li>기본 수수료 : <input name="default_fee" value="<?php echo $params->default_fee;?>" /> %</li>
+			<li>기본 수수료 : <input name="fee" value="<?php echo $params->fee;?>" /> %</li>
 			<li>평균 배달시간 : <input name="average_delivery_time" value="<?php echo $params->average_delivery_time;?>" /> 분</li>
 		</ul>
 		<input type="submit" value="매장 추가" />
