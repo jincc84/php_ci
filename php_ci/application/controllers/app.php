@@ -11,6 +11,7 @@ class App extends CI_Controller {
 	 * tmonplus 설치 페이지 링크
 	 */
 	public function tmonplus_store() {
+		$this->load->helper("url");
 		$os_detection = $this->os_detection();
 		switch($os_detection) {
 			case App::APP_OS_IOS:
@@ -26,7 +27,8 @@ class App extends CI_Controller {
 
 // 		echo $_SERVER["HTTP_USER_AGENT"] . "<br />";
 // 		echo $link;
-		header('Location: ' . $link);
+
+		redirect($link, "refresh");
 	}
 
 	/**
