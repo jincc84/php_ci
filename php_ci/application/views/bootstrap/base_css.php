@@ -10,7 +10,7 @@
 </style>
 </head>
 <body>
-	<a href="#aaa" id="bottom_anchor">bottom</a>
+	<a href="#bottom" id="bottom_anchor">bottom</a>
 <?php for($i=1;$i<=6;$i++):?>
 	<h<?php echo $i;?>><?php echo "H".$i;?> Heading <?php $i;?></h<?php echo $i;?>>
 <?php endfor;?>
@@ -238,6 +238,76 @@
 				<li class="divider"></li>
 				<li><a href="#">Separated link</a></li>
 			</ul>
+		</div>
+	</div>
+
+	<form class="form-search">
+		<div class="input-append">
+			<input type="text" class="span2 search-query">
+			<button type="submit" class="btn btn-primary">Search</button>
+		</div>
+	</form>
+
+	<div class="controls">
+		<input class="span5" type="text" placeholder=".span5">
+	</div>
+	<div class="controls controls-row">
+		<input class="span4" type="text" placeholder=".span4">
+		<input class="span1" type="text" placeholder=".span1">
+	</div>
+
+	<p>
+		<span class="input-xlarge uneditable-input">Some value here</span>
+	</p>
+
+	<p>
+		<a href="#" class="btn btn-large btn-primary">Primary link</a>
+		<a href="#" class="btn btn-large disabled" disabled>Link</a>
+
+		<button type="button" class="btn btn-large btn-primary disabled" disabled="disabled">Primary button</button>
+		<button type="button" class="btn btn-large" disabled>Button</button>
+	</p>
+
+	<i class="icon-edit"></i>
+
+	<div class="btn-toolbar">
+		<div class="btn-group">
+
+			<a class="btn" href="#"><i class="icon-align-left"></i> </a> <a
+				class="btn" href="#"><i class="icon-align-center"></i> </a> <a
+				class="btn" href="#"><i class="icon-align-right"></i> </a> <a
+				class="btn" href="#"><i class="icon-align-justify"></i> </a>
+		</div>
+	</div>
+
+	<div class="btn-group">
+		<a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i>
+			User</a> <a class="btn btn-primary dropdown-toggle"
+			data-toggle="dropdown" href="#"><span class="caret"></span> </a>
+		<ul class="dropdown-menu">
+			<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+			<li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+			<li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+			<li class="divider"></li>
+			<li><a href="#"><i class="i"></i> Make admin</a></li>
+		</ul>
+	</div>
+
+	<ul class="nav nav-list">
+		<li class="active"><a href="#"><i class="icon-home icon-white"></i>
+				Home</a></li>
+		<li><a href="#"><i class="icon-book"></i> Library</a></li>
+		<li><a href="#"><i class="icon-pencil"></i> Applications</a></li>
+		<li><a href="#"><i class="i"></i> Misc</a></li>
+	</ul>
+
+	<div class="control-group">
+		<label class="control-label" for="inputIcon">Email address</label>
+		<div class="controls">
+			<div class="input-prepend">
+				<span class="add-on"><i class="icon-envelope"></i> </span> <input
+					class="span2" id="inputIcon" type="text">
+			</div>
 		</div>
 	</div>
 
